@@ -19,13 +19,6 @@ function daysBetween(date1, date2) {
 }
 
 function isMaterialExpired(material, validityDays, handleDate) {
-  if (!validityDays || validityDays <= 0) {
-    return false;
-  }
-  if (!material.issueDate) {
-    return false;
-  }
-  const daysSinceIssued = daysBetween(material.issueDate, handleDate);
   if (material.expiryDate) {
     const expiryDate = new Date(material.expiryDate);
     const handle = new Date(handleDate);
@@ -33,6 +26,16 @@ function isMaterialExpired(material, validityDays, handleDate) {
       return true;
     }
   }
+
+  if (!validityDays || validityDays <= 0) {
+    return false;
+  }
+
+  if (!material.issueDate) {
+    return false;
+  }
+
+  const daysSinceIssued = daysBetween(material.issueDate, handleDate);
   return daysSinceIssued > validityDays;
 }
 
@@ -177,18 +180,67 @@ function matchRule(cardType, businessType, params) {
       );
 
       if (alternatives.length > 0) {
-        const altDetails = alternatives.map(alt => ({
-          key: alt,
-          name: materialNames[alt] || alt
-        }));
-        result.alternativeSuggestions.push({
-          original: {
+        let allAlternativesValid = true;
+        const validAlternatives = [];
+        const expiredAlternatives = [];
+
+        for (const alt of alternatives) {
+          const altMaterialDetail = userMaterials.find(m => m.key === alt);
+          const altValidityDays = ruleVersion.materialValidityDays[alt];
+          if (altMaterialDetail && isMaterialExpired(altMaterialDetail, altValidityDays, handleDate)) {
+            allAlternativesValid = false;
+            expiredAlternatives.push({
+              key: alt,
+              name: materialNames[alt] || alt,
+              issueDate: altMaterialDetail.issueDate,
+              expiryDate: altMaterialDetail.expiryDate,
+              validityDays: altValidityDays,
+              daysSinceIssued: daysBetween(altMaterialDetail.issueDate, handleDate)
+            });
+          } else {
+            validAlternatives.push({
+              key: alt,
+              name: materialNames[alt] || alt
+            });
+          }
+        }
+
+        if (validAlternatives.length > 0) {
+          result.alternativeSuggestions.push({
+            original: {
+              key: requiredMat,
+              name: materialNames[requiredMat] || requiredMat
+            },
+            alternatives: validAlternatives,
+            used: true
+          });
+          if (expiredAlternatives.length > 0) {
+            result.expiredMaterials.push(...expiredAlternatives);
+          }
+        } else {
+          result.canProceed = false;
+          result.expiredMaterials.push(...expiredAlternatives);
+          result.missingMaterials.push({
             key: requiredMat,
             name: materialNames[requiredMat] || requiredMat
-          },
-          alternatives: altDetails,
-          used: true
-        });
+          });
+          result.errors.push(`替代材料${expiredAlternatives.map(m => m.name).join('、')}已过期，且无有效替代材料`);
+          result.alternativeSuggestions.push({
+            original: {
+              key: requiredMat,
+              name: materialNames[requiredMat] || requiredMat
+            },
+            alternatives: (ruleVersion.materialAlternatives[requiredMat] || []).map(alt => ({
+              key: alt,
+              name: materialNames[alt] || alt
+            })),
+            used: false
+          });
+        }
+
+        if (!allAlternativesValid && validAlternatives.length > 0) {
+          result.errors.push(`部分替代材料已过期：${expiredAlternatives.map(m => m.name).join('、')}，已使用有效替代材料`);
+        }
       } else {
         result.canProceed = false;
         result.missingMaterials.push({
@@ -272,7 +324,10 @@ function matchRule(cardType, businessType, params) {
         } else {
           const materialDetail = userMaterials.find(m => m.key === agentMat);
           if (materialDetail) {
-            const validityDays = ruleVersion.materialValidityDays[agentMat];
+            let validityDays = ruleVersion.materialValidityDays[agentMat];
+            if (agentMat === 'agent_authorization' && ruleVersion.agentAuthorizationValidityDays) {
+              validityDays = ruleVersion.agentAuthorizationValidityDays;
+            }
             if (isMaterialExpired(materialDetail, validityDays, handleDate)) {
               result.canProceed = false;
               result.expiredMaterials.push({
@@ -465,7 +520,62 @@ function getRuleConfigByVersion(cardType, businessType, versionNumber) {
     return null;
   }
 
-  return getRuleConfig(cardType, businessType, 'all', ruleVersion.effectiveDate);
+  const rule = ruleVersion[cardType];
+
+  const alternativesWithNames = {};
+  for (const [key, alts] of Object.entries(ruleVersion.materialAlternatives || {})) {
+    alternativesWithNames[key] = {
+      original: {
+        key,
+        name: materialNames[key] || key
+      },
+      alternatives: alts.map(alt => ({
+        key: alt,
+        name: materialNames[alt] || alt
+      }))
+    };
+  }
+
+  const validityWithNames = {};
+  for (const [key, days] of Object.entries(ruleVersion.materialValidityDays || {})) {
+    validityWithNames[key] = {
+      key,
+      name: materialNames[key] || key,
+      validityDays: days
+    };
+  }
+
+  return {
+    businessType,
+    businessName: businessTypeNames[businessType],
+    cardType,
+    cardName: cardTypes[cardType]?.name,
+    version: ruleVersion.version,
+    effectiveDate: ruleVersion.effectiveDate,
+    applicableCommunities: ruleVersion.applicableCommunities,
+    ageRequirement: rule.ageRequirement,
+    mustBePresent: rule.mustBePresent,
+    allowedAgents: (rule.allowedAgents || []).map(r => ({
+      key: r,
+      name: agentRelationNames[r] || r
+    })),
+    requiredMaterials: (rule.requiredMaterials || []).map(m => ({
+      key: m,
+      name: materialNames[m] || m
+    })),
+    agentRequiredMaterials: (rule.agentRequiredMaterials || []).map(m => ({
+      key: m,
+      name: materialNames[m] || m
+    })),
+    materialAlternatives: alternativesWithNames,
+    materialValidity: validityWithNames,
+    agentAuthorizationValidityDays: ruleVersion.agentAuthorizationValidityDays,
+    seniorReviewRules: {
+      ...ruleVersion.seniorReviewRules,
+      reviewerLevelName: reviewLevelNames[ruleVersion.seniorReviewRules?.reviewerLevel] || ruleVersion.seniorReviewRules?.reviewerLevel
+    },
+    specialReminders: rule.specialReminders || []
+  };
 }
 
 function getAllMaterialNames() {
