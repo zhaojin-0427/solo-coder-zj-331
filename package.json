@@ -1,0 +1,13 @@
+{
+  "name": "elder-card-service",
+  "version": "1.0.0",
+  "description": "长者卡证办理规则匹配与代办提示 API 服务",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

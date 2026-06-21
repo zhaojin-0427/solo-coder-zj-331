@@ -1,0 +1,512 @@
+[
+  {
+    "id": "1782009289410sqre0s",
+    "cardType": "medical_card",
+    "businessType": "annual_review",
+    "age": 72,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "materials": [],
+    "result": {
+      "success": false,
+      "canProceed": false,
+      "errors": [
+        "就诊卡不支持此业务类型"
+      ],
+      "missingMaterials": [],
+      "agentAllowed": false,
+      "agentErrors": [],
+      "specialReminders": []
+    },
+    "createdAt": "2026-06-21T02:34:49.410Z"
+  },
+  {
+    "id": "17820092824258nvtto",
+    "cardType": "senior_card",
+    "businessType": "reissue",
+    "age": 62,
+    "isPresent": false,
+    "isAgent": true,
+    "agentRelation": "children",
+    "materials": [
+      "id_card",
+      "photo"
+    ],
+    "result": {
+      "success": true,
+      "canProceed": false,
+      "errors": [
+        "代办缺少材料：代办人身份证、关系证明（户口本/结婚证等）"
+      ],
+      "missingMaterials": [
+        {
+          "key": "agent_id_card",
+          "name": "代办人身份证"
+        },
+        {
+          "key": "proof_of_relationship",
+          "name": "关系证明（户口本/结婚证等）"
+        }
+      ],
+      "agentAllowed": true,
+      "agentErrors": [
+        "代办缺少材料：代办人身份证、关系证明（户口本/结婚证等）"
+      ],
+      "specialReminders": [
+        "需本人近期一寸免冠彩色照片1张",
+        "补办需缴纳工本费15元",
+        "原卡作废，不可恢复"
+      ],
+      "ageCheck": {
+        "required": 60,
+        "current": 62,
+        "passed": true
+      },
+      "presenceRequired": false,
+      "isPresent": false,
+      "businessName": "补办",
+      "cardName": "老年卡"
+    },
+    "createdAt": "2026-06-21T02:34:42.425Z"
+  },
+  {
+    "id": "1782007091214d6q9f5",
+    "cardType": "medical_card",
+    "businessType": "annual_review",
+    "age": 70,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "materials": [],
+    "result": {
+      "success": false,
+      "canProceed": false,
+      "errors": [
+        "就诊卡不支持此业务类型"
+      ],
+      "missingMaterials": [],
+      "agentAllowed": false,
+      "agentErrors": [],
+      "specialReminders": []
+    },
+    "createdAt": "2026-06-21T01:58:11.214Z"
+  },
+  {
+    "id": "1782007064531a66k4x",
+    "cardType": "bus_card",
+    "businessType": "report_loss",
+    "age": 70,
+    "isPresent": false,
+    "isAgent": true,
+    "agentRelation": "children",
+    "materials": [
+      "id_card",
+      "agent_id_card"
+    ],
+    "result": {
+      "success": true,
+      "canProceed": true,
+      "errors": [],
+      "missingMaterials": [],
+      "agentAllowed": true,
+      "agentErrors": [],
+      "specialReminders": [
+        "挂失后24小时内生效",
+        "可电话挂失后再到窗口办理正式手续",
+        "挂失后找到原卡可办理解挂"
+      ],
+      "ageCheck": {
+        "required": 65,
+        "current": 70,
+        "passed": true
+      },
+      "presenceRequired": false,
+      "isPresent": false,
+      "businessName": "挂失",
+      "cardName": "公交卡"
+    },
+    "createdAt": "2026-06-21T01:57:44.531Z"
+  },
+  {
+    "id": "1782007060383fqe466",
+    "cardType": "bus_card",
+    "businessType": "report_loss",
+    "age": 70,
+    "isPresent": false,
+    "isAgent": true,
+    "agentRelation": "children",
+    "materials": [
+      "id_card",
+      "agent_id_card"
+    ],
+    "result": {
+      "success": true,
+      "canProceed": true,
+      "errors": [],
+      "missingMaterials": [],
+      "agentAllowed": true,
+      "agentErrors": [],
+      "specialReminders": [
+        "挂失后24小时内生效",
+        "可电话挂失后再到窗口办理正式手续",
+        "挂失后找到原卡可办理解挂"
+      ],
+      "ageCheck": {
+        "required": 65,
+        "current": 70,
+        "passed": true
+      },
+      "presenceRequired": false,
+      "isPresent": false,
+      "businessName": "挂失",
+      "cardName": "公交卡"
+    },
+    "createdAt": "2026-06-21T01:57:40.383Z"
+  },
+  {
+    "id": "17820070383179mkv01",
+    "cardType": "medical_card",
+    "businessType": "annual_review",
+    "age": 70,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "materials": [],
+    "result": {
+      "success": false,
+      "canProceed": false,
+      "errors": [
+        "就诊卡不支持此业务类型"
+      ],
+      "missingMaterials": [],
+      "agentAllowed": false,
+      "agentErrors": [],
+      "specialReminders": []
+    },
+    "createdAt": "2026-06-21T01:57:18.317Z"
+  },
+  {
+    "id": "1782007021875ejdp2s",
+    "cardType": "senior_card",
+    "businessType": "apply",
+    "age": 65,
+    "isPresent": false,
+    "isAgent": true,
+    "agentRelation": "children",
+    "materials": [
+      "id_card",
+      "photo",
+      "household_register",
+      "agent_id_card",
+      "proof_of_relationship"
+    ],
+    "result": {
+      "success": true,
+      "canProceed": false,
+      "errors": [
+        "此业务必须本人到场办理"
+      ],
+      "missingMaterials": [],
+      "agentAllowed": true,
+      "agentErrors": [
+        "此业务必须本人到场办理"
+      ],
+      "specialReminders": [
+        "需本人近期一寸免冠彩色照片1张",
+        "需提供本市户籍证明",
+        "年满60周岁即可办理，按周岁计算"
+      ],
+      "ageCheck": {
+        "required": 60,
+        "current": 65,
+        "passed": true
+      },
+      "presenceRequired": true,
+      "isPresent": false,
+      "businessName": "办理",
+      "cardName": "老年卡"
+    },
+    "createdAt": "2026-06-21T01:57:01.875Z"
+  },
+  {
+    "id": "17820051717198htre9",
+    "cardType": "senior_card",
+    "businessType": "reissue",
+    "age": 62,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": "children",
+    "materials": [
+      "id_card",
+      "photo"
+    ],
+    "result": {
+      "success": true,
+      "canProceed": true,
+      "errors": [],
+      "missingMaterials": [],
+      "agentAllowed": true,
+      "agentErrors": [],
+      "specialReminders": [
+        "需本人近期一寸免冠彩色照片1张",
+        "补办需缴纳工本费15元",
+        "原卡作废，不可恢复"
+      ],
+      "ageCheck": {
+        "required": 60,
+        "current": 62,
+        "passed": true
+      },
+      "presenceRequired": false,
+      "isPresent": true,
+      "businessName": "补办",
+      "cardName": "老年卡"
+    },
+    "createdAt": "2026-06-21T01:26:11.719Z"
+  },
+  {
+    "id": "178200516069487iko4",
+    "cardType": "medical_card",
+    "businessType": "annual_review",
+    "age": 72,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "materials": [],
+    "result": {
+      "success": true,
+      "canProceed": true,
+      "errors": [],
+      "missingMaterials": [],
+      "agentAllowed": true,
+      "agentErrors": [],
+      "specialReminders": [
+        "就诊卡无需年审"
+      ],
+      "ageCheck": {
+        "required": 0,
+        "current": 72,
+        "passed": true
+      },
+      "presenceRequired": false,
+      "isPresent": true,
+      "businessName": "年审",
+      "cardName": "就诊卡"
+    },
+    "createdAt": "2026-06-21T01:26:00.694Z"
+  },
+  {
+    "id": "1782005160461sn7467",
+    "cardType": "senior_card",
+    "businessType": "reissue",
+    "age": 62,
+    "isPresent": false,
+    "isAgent": true,
+    "agentRelation": "children",
+    "materials": [
+      "id_card",
+      "photo"
+    ],
+    "result": {
+      "success": true,
+      "canProceed": false,
+      "errors": [
+        "代办缺少材料：代办人身份证、关系证明（户口本/结婚证等）"
+      ],
+      "missingMaterials": [
+        {
+          "key": "agent_id_card",
+          "name": "代办人身份证"
+        },
+        {
+          "key": "proof_of_relationship",
+          "name": "关系证明（户口本/结婚证等）"
+        }
+      ],
+      "agentAllowed": true,
+      "agentErrors": [
+        "代办缺少材料：代办人身份证、关系证明（户口本/结婚证等）"
+      ],
+      "specialReminders": [
+        "需本人近期一寸免冠彩色照片1张",
+        "补办需缴纳工本费15元",
+        "原卡作废，不可恢复"
+      ],
+      "ageCheck": {
+        "required": 60,
+        "current": 62,
+        "passed": true
+      },
+      "presenceRequired": false,
+      "isPresent": false,
+      "businessName": "补办",
+      "cardName": "老年卡"
+    },
+    "createdAt": "2026-06-21T01:26:00.461Z"
+  },
+  {
+    "id": "1782005159951gmc1d7",
+    "cardType": "bus_card",
+    "businessType": "annual_review",
+    "age": 70,
+    "isPresent": false,
+    "isAgent": true,
+    "agentRelation": "other",
+    "materials": [
+      "id_card",
+      "bus_card",
+      "agent_id_card"
+    ],
+    "result": {
+      "success": true,
+      "canProceed": false,
+      "errors": [
+        "其他不符合代办要求"
+      ],
+      "missingMaterials": [],
+      "agentAllowed": false,
+      "agentErrors": [
+        "其他不符合代办要求"
+      ],
+      "specialReminders": [
+        "每年需年审一次",
+        "年审通过后卡内优惠继续有效",
+        "逾期未年审将暂停优惠待遇"
+      ],
+      "ageCheck": {
+        "required": 65,
+        "current": 70,
+        "passed": true
+      },
+      "presenceRequired": false,
+      "isPresent": false,
+      "businessName": "年审",
+      "cardName": "公交卡"
+    },
+    "createdAt": "2026-06-21T01:25:59.951Z"
+  },
+  {
+    "id": "1782005159903j7y9oh",
+    "cardType": "bus_card",
+    "businessType": "apply",
+    "age": 66,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "materials": [
+      "id_card",
+      "photo",
+      "household_register"
+    ],
+    "result": {
+      "success": true,
+      "canProceed": true,
+      "errors": [],
+      "missingMaterials": [],
+      "agentAllowed": true,
+      "agentErrors": [],
+      "specialReminders": [
+        "需本人近期一寸免冠彩色照片1张",
+        "需提供本市户籍证明或居住证明",
+        "首次办理免费，补办需缴纳工本费20元"
+      ],
+      "ageCheck": {
+        "required": 65,
+        "current": 66,
+        "passed": true
+      },
+      "presenceRequired": true,
+      "isPresent": true,
+      "businessName": "办理",
+      "cardName": "公交卡"
+    },
+    "createdAt": "2026-06-21T01:25:59.903Z"
+  },
+  {
+    "id": "1782004705997662x1z",
+    "cardType": "senior_card",
+    "businessType": "apply",
+    "age": 65,
+    "isPresent": false,
+    "isAgent": false,
+    "agentRelation": "children",
+    "materials": [
+      "id_card",
+      "photo",
+      "household_register",
+      "agent_id_card"
+    ],
+    "result": {
+      "success": true,
+      "canProceed": false,
+      "errors": [
+        "代办缺少材料：关系证明（户口本/结婚证等）",
+        "此业务必须本人到场办理"
+      ],
+      "missingMaterials": [
+        {
+          "key": "proof_of_relationship",
+          "name": "关系证明（户口本/结婚证等）"
+        }
+      ],
+      "agentAllowed": true,
+      "agentErrors": [
+        "代办缺少材料：关系证明（户口本/结婚证等）",
+        "此业务必须本人到场办理"
+      ],
+      "specialReminders": [
+        "需本人近期一寸免冠彩色照片1张",
+        "需提供本市户籍证明",
+        "年满60周岁即可办理，按周岁计算"
+      ],
+      "ageCheck": {
+        "required": 60,
+        "current": 65,
+        "passed": true
+      },
+      "presenceRequired": true,
+      "isPresent": false,
+      "businessName": "办理",
+      "cardName": "老年卡"
+    },
+    "createdAt": "2026-06-21T01:18:25.997Z"
+  },
+  {
+    "id": "1782004705972bsxtb8",
+    "cardType": "senior_card",
+    "businessType": "apply",
+    "age": 65,
+    "isPresent": true,
+    "isAgent": true,
+    "agentRelation": null,
+    "materials": [
+      "id_card",
+      "photo",
+      "household_register"
+    ],
+    "result": {
+      "success": true,
+      "canProceed": true,
+      "errors": [],
+      "missingMaterials": [],
+      "agentAllowed": true,
+      "agentErrors": [],
+      "specialReminders": [
+        "需本人近期一寸免冠彩色照片1张",
+        "需提供本市户籍证明",
+        "年满60周岁即可办理，按周岁计算"
+      ],
+      "ageCheck": {
+        "required": 60,
+        "current": 65,
+        "passed": true
+      },
+      "presenceRequired": true,
+      "isPresent": true,
+      "businessName": "办理",
+      "cardName": "老年卡"
+    },
+    "createdAt": "2026-06-21T01:18:25.972Z"
+  }
+]
