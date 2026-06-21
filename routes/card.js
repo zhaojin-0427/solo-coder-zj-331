@@ -2,7 +2,13 @@ const express = require('express');
 const router = express.Router();
 const { success, fail } = require('../utils/response');
 const cardTypes = require('../config/cardTypes');
-const { getAllBusinessTypes, getAllMaterialNames, getAllAgentRelations } = require('../services/ruleService');
+const {
+  getAllBusinessTypes,
+  getAllMaterialNames,
+  getAllAgentRelations,
+  getAllCommunities,
+  getAllReviewLevels
+} = require('../services/ruleService');
 
 router.get('/types', (req, res) => {
   const list = Object.values(cardTypes).map(card => ({
@@ -45,6 +51,18 @@ router.get('/materials', (req, res) => {
 router.get('/agent-relations', (req, res) => {
   const relations = getAllAgentRelations();
   const list = Object.entries(relations).map(([key, name]) => ({ key, name }));
+  res.json(success({ list, total: list.length }));
+});
+
+router.get('/communities', (req, res) => {
+  const communities = getAllCommunities();
+  const list = Object.entries(communities).map(([key, name]) => ({ key, name }));
+  res.json(success({ list, total: list.length }));
+});
+
+router.get('/review-levels', (req, res) => {
+  const levels = getAllReviewLevels();
+  const list = Object.entries(levels).map(([key, name]) => ({ key, name }));
   res.json(success({ list, total: list.length }));
 });
 
