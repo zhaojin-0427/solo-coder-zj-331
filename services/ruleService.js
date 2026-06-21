@@ -17,6 +17,18 @@ function matchRule(cardType, businessType, params) {
     };
   }
 
+  if (!cardConfig.businessTypes.includes(businessType)) {
+    return {
+      success: false,
+      canProceed: false,
+      errors: [`${cardConfig.name}不支持此业务类型`],
+      missingMaterials: [],
+      agentAllowed: false,
+      agentErrors: [],
+      specialReminders: []
+    };
+  }
+
   const businessRule = rules[businessType];
   if (!businessRule || !businessRule[cardType]) {
     return {
@@ -119,6 +131,10 @@ function matchRule(cardType, businessType, params) {
 }
 
 function getRuleConfig(cardType, businessType) {
+  const cardConfig = cardTypes[cardType];
+  if (!cardConfig || !cardConfig.businessTypes.includes(businessType)) {
+    return null;
+  }
   const businessRule = rules[businessType];
   if (!businessRule || !businessRule[cardType]) {
     return null;

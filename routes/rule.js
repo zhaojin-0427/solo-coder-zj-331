@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { success, fail } = require('../utils/response');
+const { success, fail, parseBoolean } = require('../utils/response');
 const { matchRule, getRuleConfig } = require('../services/ruleService');
 const { addRecord } = require('../services/historyService');
 
@@ -20,9 +20,10 @@ router.post('/match', (req, res) => {
     return res.json(fail(400, '请提供是否本人到场 isPresent'));
   }
 
+  const present = parseBoolean(isPresent);
   const result = matchRule(cardType, businessType, {
     age: Number(age),
-    isPresent: Boolean(isPresent),
+    isPresent: present,
     agentRelation: agentRelation || null,
     materials: materials || []
   });
@@ -31,8 +32,8 @@ router.post('/match', (req, res) => {
     cardType,
     businessType,
     age: Number(age),
-    isPresent: Boolean(isPresent),
-    isAgent: !Boolean(isPresent),
+    isPresent: present,
+    isAgent: !present,
     agentRelation: agentRelation || null,
     materials: materials || [],
     result
@@ -72,7 +73,7 @@ router.post('/check', (req, res) => {
 
   const result = matchRule(cardType, businessType, {
     age: Number(age),
-    isPresent: Boolean(isPresent),
+    isPresent: parseBoolean(isPresent),
     agentRelation: agentRelation || null,
     materials: materials || []
   });

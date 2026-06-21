@@ -144,14 +144,6 @@ const rules = {
         '需确认持卡人健在且符合条件',
         '可到社区服务中心办理'
       ]
-    },
-    medical_card: {
-      requiredMaterials: [],
-      mustBePresent: false,
-      allowedAgents: [],
-      agentRequiredMaterials: [],
-      ageRequirement: 0,
-      specialReminders: ['就诊卡无需年审']
     }
   }
 };

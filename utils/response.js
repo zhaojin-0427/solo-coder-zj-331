@@ -1,3 +1,13 @@
+function parseBoolean(value) {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') {
+    const lower = value.toLowerCase().trim();
+    return lower === 'true' || lower === '1' || lower === 'yes' || lower === 'on';
+  }
+  if (typeof value === 'number') return value !== 0;
+  return Boolean(value);
+}
+
 function success(data, message = 'success') {
   return {
     code: 0,
@@ -22,5 +32,6 @@ function errorHandler(err, req, res, next) {
 module.exports = {
   success,
   fail,
-  errorHandler
+  errorHandler,
+  parseBoolean
 };
