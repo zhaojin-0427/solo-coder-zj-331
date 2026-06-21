@@ -5,6 +5,7 @@ const cardRoutes = require('./routes/card');
 const ruleRoutes = require('./routes/rule');
 const historyRoutes = require('./routes/history');
 const statsRoutes = require('./routes/stats');
+const appointmentRoutes = require('./routes/appointment');
 
 const { errorHandler } = require('./utils/response');
 
@@ -30,6 +31,7 @@ app.use('/api/card', cardRoutes);
 app.use('/api/rule', ruleRoutes);
 app.use('/api/history', historyRoutes);
 app.use('/api/stats', statsRoutes);
+app.use('/api/appointment', appointmentRoutes);
 
 app.use(errorHandler);
 

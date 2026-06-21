@@ -1,0 +1,200 @@
+[
+  {
+    "id": "APT1782031507229WQ7T01",
+    "cardType": "bus_card",
+    "cardName": "公交卡",
+    "businessType": "apply",
+    "businessName": "办理",
+    "age": 70,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "agentRelationName": null,
+    "agentComplexity": null,
+    "communityId": "community_001",
+    "communityName": "朝阳社区",
+    "expectedDate": "2026-06-25",
+    "expectedTimeSlot": "10:00-10:30",
+    "expectedTimePeriod": "morning",
+    "assignedWindowId": "C1_W1",
+    "assignedWindowType": "general",
+    "assignedWindowTypeName": "综合窗口",
+    "alternativeWindows": [
+      {
+        "windowId": "C1_W2",
+        "type": "general",
+        "typeName": "综合窗口",
+        "typeDescription": "可办理各类常规业务",
+        "capacity": 2,
+        "priorityScore": 20,
+        "communityId": "community_001",
+        "communityName": "朝阳社区",
+        "currentLoadMinutes": 0,
+        "loadRatio": 0,
+        "finalScore": 20,
+        "estimatedQueueCount": 0
+      },
+      {
+        "windowId": "C1_W3",
+        "type": "senior",
+        "typeName": "高龄专窗",
+        "typeDescription": "高龄老人优先，处理特殊复核业务",
+        "capacity": 1,
+        "priorityScore": 5,
+        "communityId": "community_001",
+        "communityName": "朝阳社区",
+        "currentLoadMinutes": 0,
+        "loadRatio": 0,
+        "finalScore": 5,
+        "estimatedQueueCount": 0
+      }
+    ],
+    "alternativeTimeSlots": [
+      {
+        "slot": "14:30-15:00",
+        "period": "afternoon",
+        "periodName": "下午",
+        "startTime": "14:30",
+        "endTime": "15:00",
+        "available": true,
+        "loadRatio": 0,
+        "totalLoadMinutes": 0,
+        "estimatedWaitMinutes": 0,
+        "score": 110
+      },
+      {
+        "slot": "09:00-09:30",
+        "period": "morning",
+        "periodName": "上午",
+        "startTime": "09:00",
+        "endTime": "09:30",
+        "available": true,
+        "loadRatio": 0,
+        "totalLoadMinutes": 0,
+        "estimatedWaitMinutes": 0,
+        "score": 100
+      },
+      {
+        "slot": "09:30-10:00",
+        "period": "morning",
+        "periodName": "上午",
+        "startTime": "09:30",
+        "endTime": "10:00",
+        "available": true,
+        "loadRatio": 0,
+        "totalLoadMinutes": 0,
+        "estimatedWaitMinutes": 0,
+        "score": 100
+      },
+      {
+        "slot": "10:30-11:00",
+        "period": "morning",
+        "periodName": "上午",
+        "startTime": "10:30",
+        "endTime": "11:00",
+        "available": true,
+        "loadRatio": 0,
+        "totalLoadMinutes": 0,
+        "estimatedWaitMinutes": 0,
+        "score": 100
+      }
+    ],
+    "businessMinutes": 15,
+    "estimatedWaitMinutes": 0,
+    "estimatedTotalMinutes": 15,
+    "isReviewRequired": false,
+    "materials": [
+      {
+        "key": "id_card",
+        "issueDate": "2024-01-01",
+        "expiryDate": null,
+        "idNumber": "110101195501018888"
+      },
+      {
+        "key": "photo",
+        "issueDate": null,
+        "expiryDate": null
+      },
+      {
+        "key": "household_register",
+        "issueDate": "2023-06-01",
+        "expiryDate": null
+      }
+    ],
+    "materialKeys": [
+      "id_card",
+      "photo",
+      "household_register"
+    ],
+    "idCardKey": "110101195501018888",
+    "applicantName": "重复测试老人",
+    "applicantContact": null,
+    "ruleVersion": {
+      "version": "v2.0",
+      "effectiveDate": "2025-01-01",
+      "applicableCommunities": [
+        "all"
+      ],
+      "communityName": "朝阳社区"
+    },
+    "status": "pending",
+    "statusName": "待确认",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "time": "2026-06-21T08:45:07.229Z",
+        "operatorId": "system",
+        "operatorName": "系统",
+        "remark": "创建预约"
+      }
+    ],
+    "cancelReason": null,
+    "cancelReasonCode": null,
+    "cancelRemark": null,
+    "cancelledBy": null,
+    "cancelledAt": null,
+    "confirmedAt": null,
+    "confirmedBy": null,
+    "operatorId": "system",
+    "operatorName": "系统",
+    "remarks": null,
+    "predictionSnapshot": {
+      "recommendedWindow": {
+        "windowId": "C1_W1",
+        "type": "general",
+        "typeName": "综合窗口",
+        "typeDescription": "可办理各类常规业务",
+        "capacity": 2,
+        "priorityScore": 20,
+        "communityId": "community_001",
+        "communityName": "朝阳社区",
+        "currentLoadMinutes": 0,
+        "loadRatio": 0,
+        "finalScore": 20,
+        "estimatedQueueCount": 0
+      },
+      "recommendedTimeSlot": {
+        "slot": "10:00-10:30",
+        "period": "morning",
+        "periodName": "上午",
+        "startTime": "10:00",
+        "endTime": "10:30",
+        "available": true,
+        "loadRatio": 0,
+        "totalLoadMinutes": 0,
+        "estimatedWaitMinutes": 0,
+        "score": 110
+      },
+      "diversionSuggestions": [
+        "该业务可在3种类型窗口办理，推荐优先选择综合窗口"
+      ],
+      "specialReminders": [
+        "需本人近期一寸免冠彩色照片1张",
+        "需提供本市户籍证明或居住证明",
+        "首次办理免费，补办需缴纳工本费20元"
+      ]
+    },
+    "createdAt": "2026-06-21T08:45:07.229Z",
+    "updatedAt": "2026-06-21T08:45:07.229Z"
+  }
+]

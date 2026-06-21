@@ -1,5 +1,461 @@
 [
   {
+    "id": "1782030070844qcf5fz",
+    "cardType": "bus_card",
+    "businessType": "report_loss",
+    "age": 70,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "materials": [
+      {
+        "key": "id_card",
+        "issueDate": "2026-02-30",
+        "expiryDate": null
+      }
+    ],
+    "materialKeys": [
+      "id_card"
+    ],
+    "communityId": "community_001",
+    "handleDate": "2026-06-21",
+    "result": {
+      "success": true,
+      "canProceed": true,
+      "errors": [],
+      "missingMaterials": [],
+      "expiredMaterials": [],
+      "alternativeSuggestions": [],
+      "agentAllowed": true,
+      "agentErrors": [],
+      "agentRestrictions": [],
+      "seniorReview": null,
+      "nextSteps": [
+        "材料齐全且符合要求，可正常办理"
+      ],
+      "ruleVersion": {
+        "version": "v2.0",
+        "effectiveDate": "2025-01-01",
+        "applicableCommunities": [
+          "all"
+        ],
+        "communityName": "朝阳社区"
+      },
+      "specialReminders": [
+        "挂失后24小时内生效",
+        "可电话挂失后再到窗口办理正式手续",
+        "挂失后找到原卡可办理解挂"
+      ],
+      "ageCheck": {
+        "required": 65,
+        "current": 70,
+        "passed": true
+      },
+      "presenceRequired": false,
+      "isPresent": true,
+      "businessName": "挂失",
+      "cardName": "公交卡"
+    },
+    "ruleVersion": "v2.0",
+    "seniorReviewTriggered": false,
+    "canProceedSuccessfully": true,
+    "createdAt": "2026-06-21T08:21:10.844Z"
+  },
+  {
+    "id": "1782030070795cvjx8b",
+    "cardType": "bus_card",
+    "businessType": "report_loss",
+    "age": 70,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "materials": [
+      {
+        "key": "id_card",
+        "issueDate": "2026-01-01",
+        "expiryDate": null
+      }
+    ],
+    "materialKeys": [
+      "id_card"
+    ],
+    "communityId": "community_001",
+    "handleDate": "2026-03-02",
+    "result": {
+      "success": true,
+      "canProceed": true,
+      "errors": [],
+      "missingMaterials": [],
+      "expiredMaterials": [],
+      "alternativeSuggestions": [],
+      "agentAllowed": true,
+      "agentErrors": [],
+      "agentRestrictions": [],
+      "seniorReview": null,
+      "nextSteps": [
+        "材料齐全且符合要求，可正常办理"
+      ],
+      "ruleVersion": {
+        "version": "v2.0",
+        "effectiveDate": "2025-01-01",
+        "applicableCommunities": [
+          "all"
+        ],
+        "communityName": "朝阳社区"
+      },
+      "specialReminders": [
+        "挂失后24小时内生效",
+        "可电话挂失后再到窗口办理正式手续",
+        "挂失后找到原卡可办理解挂"
+      ],
+      "ageCheck": {
+        "required": 65,
+        "current": 70,
+        "passed": true
+      },
+      "presenceRequired": false,
+      "isPresent": true,
+      "businessName": "挂失",
+      "cardName": "公交卡"
+    },
+    "ruleVersion": "v2.0",
+    "seniorReviewTriggered": false,
+    "canProceedSuccessfully": true,
+    "createdAt": "2026-06-21T08:21:10.795Z"
+  },
+  {
+    "id": "1782030030846fdjqti",
+    "cardType": "bus_card",
+    "businessType": "report_loss",
+    "age": 70,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "materials": [
+      {
+        "key": "id_card",
+        "issueDate": null,
+        "expiryDate": null
+      }
+    ],
+    "materialKeys": [
+      "id_card"
+    ],
+    "communityId": "community_001",
+    "handleDate": "2026-06-21",
+    "result": {
+      "success": true,
+      "canProceed": true,
+      "errors": [],
+      "missingMaterials": [],
+      "expiredMaterials": [],
+      "alternativeSuggestions": [],
+      "agentAllowed": true,
+      "agentErrors": [],
+      "agentRestrictions": [],
+      "seniorReview": null,
+      "nextSteps": [
+        "材料齐全且符合要求，可正常办理"
+      ],
+      "ruleVersion": {
+        "version": "v2.0",
+        "effectiveDate": "2025-01-01",
+        "applicableCommunities": [
+          "all"
+        ],
+        "communityName": "朝阳社区"
+      },
+      "specialReminders": [
+        "挂失后24小时内生效",
+        "可电话挂失后再到窗口办理正式手续",
+        "挂失后找到原卡可办理解挂"
+      ],
+      "ageCheck": {
+        "required": 65,
+        "current": 70,
+        "passed": true
+      },
+      "presenceRequired": false,
+      "isPresent": true,
+      "businessName": "挂失",
+      "cardName": "公交卡"
+    },
+    "ruleVersion": "v2.0",
+    "seniorReviewTriggered": false,
+    "canProceedSuccessfully": true,
+    "createdAt": "2026-06-21T08:20:30.846Z"
+  },
+  {
+    "id": "17820300308420halzo",
+    "cardType": "senior_card",
+    "businessType": "apply",
+    "age": 70,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "materials": [
+      {
+        "key": "id_card",
+        "issueDate": "2026-01-01",
+        "expiryDate": null
+      },
+      {
+        "key": "photo",
+        "issueDate": null,
+        "expiryDate": null
+      },
+      {
+        "key": "residence_permit",
+        "issueDate": "2020-01-01",
+        "expiryDate": null
+      },
+      {
+        "key": "property_certificate",
+        "issueDate": "2026-01-01",
+        "expiryDate": null
+      }
+    ],
+    "materialKeys": [
+      "id_card",
+      "photo",
+      "residence_permit",
+      "property_certificate"
+    ],
+    "communityId": "community_001",
+    "handleDate": "2026-06-21",
+    "result": {
+      "success": true,
+      "canProceed": true,
+      "errors": [
+        "部分替代材料已过期：居住证，已使用有效替代材料"
+      ],
+      "missingMaterials": [],
+      "expiredMaterials": [
+        {
+          "key": "residence_permit",
+          "name": "居住证",
+          "issueDate": "2020-01-01",
+          "expiryDate": null,
+          "validityDays": 365,
+          "daysSinceIssued": 2363
+        }
+      ],
+      "alternativeSuggestions": [
+        {
+          "original": {
+            "key": "household_register",
+            "name": "户口本/居住证明"
+          },
+          "alternatives": [
+            {
+              "key": "property_certificate",
+              "name": "房产证明"
+            }
+          ],
+          "used": true
+        }
+      ],
+      "agentAllowed": true,
+      "agentErrors": [],
+      "agentRestrictions": [],
+      "seniorReview": null,
+      "nextSteps": [
+        "材料齐全且符合要求，可正常办理"
+      ],
+      "ruleVersion": {
+        "version": "v2.0",
+        "effectiveDate": "2025-01-01",
+        "applicableCommunities": [
+          "all"
+        ],
+        "communityName": "朝阳社区"
+      },
+      "specialReminders": [
+        "需本人近期一寸免冠彩色照片1张",
+        "需提供本市户籍证明",
+        "年满60周岁即可办理，按周岁计算"
+      ],
+      "ageCheck": {
+        "required": 60,
+        "current": 70,
+        "passed": true
+      },
+      "presenceRequired": true,
+      "isPresent": true,
+      "businessName": "办理",
+      "cardName": "老年卡"
+    },
+    "ruleVersion": "v2.0",
+    "seniorReviewTriggered": false,
+    "canProceedSuccessfully": false,
+    "createdAt": "2026-06-21T08:20:30.842Z"
+  },
+  {
+    "id": "1782030030837137ofe",
+    "cardType": "bus_card",
+    "businessType": "report_loss",
+    "age": 70,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "materials": [
+      {
+        "key": "id_card",
+        "issueDate": "2027-01-01",
+        "expiryDate": null
+      }
+    ],
+    "materialKeys": [
+      "id_card"
+    ],
+    "communityId": "community_001",
+    "handleDate": "2026-06-21",
+    "result": {
+      "success": true,
+      "canProceed": true,
+      "errors": [],
+      "missingMaterials": [],
+      "expiredMaterials": [],
+      "alternativeSuggestions": [],
+      "agentAllowed": true,
+      "agentErrors": [],
+      "agentRestrictions": [],
+      "seniorReview": null,
+      "nextSteps": [
+        "材料齐全且符合要求，可正常办理"
+      ],
+      "ruleVersion": {
+        "version": "v2.0",
+        "effectiveDate": "2025-01-01",
+        "applicableCommunities": [
+          "all"
+        ],
+        "communityName": "朝阳社区"
+      },
+      "specialReminders": [
+        "挂失后24小时内生效",
+        "可电话挂失后再到窗口办理正式手续",
+        "挂失后找到原卡可办理解挂"
+      ],
+      "ageCheck": {
+        "required": 65,
+        "current": 70,
+        "passed": true
+      },
+      "presenceRequired": false,
+      "isPresent": true,
+      "businessName": "挂失",
+      "cardName": "公交卡"
+    },
+    "ruleVersion": "v2.0",
+    "seniorReviewTriggered": false,
+    "canProceedSuccessfully": true,
+    "createdAt": "2026-06-21T08:20:30.837Z"
+  },
+  {
+    "id": "1782030030822jagd0a",
+    "cardType": "senior_card",
+    "businessType": "apply",
+    "age": 70,
+    "isPresent": false,
+    "isAgent": true,
+    "agentRelation": "children",
+    "materials": [
+      {
+        "key": "id_card",
+        "issueDate": "2026-01-01",
+        "expiryDate": null
+      },
+      {
+        "key": "photo",
+        "issueDate": null,
+        "expiryDate": null
+      },
+      {
+        "key": "household_register",
+        "issueDate": null,
+        "expiryDate": null
+      },
+      {
+        "key": "agent_id_card",
+        "issueDate": "2026-01-01",
+        "expiryDate": null
+      },
+      {
+        "key": "proof_of_relationship",
+        "issueDate": null,
+        "expiryDate": null
+      },
+      {
+        "key": "agent_authorization",
+        "issueDate": "2026-06-01",
+        "expiryDate": null
+      }
+    ],
+    "materialKeys": [
+      "id_card",
+      "photo",
+      "household_register",
+      "agent_id_card",
+      "proof_of_relationship",
+      "agent_authorization"
+    ],
+    "communityId": "community_001",
+    "handleDate": "2026-06-21",
+    "result": {
+      "success": true,
+      "canProceed": false,
+      "errors": [
+        "此业务必须本人到场办理"
+      ],
+      "missingMaterials": [],
+      "expiredMaterials": [],
+      "alternativeSuggestions": [],
+      "agentAllowed": true,
+      "agentErrors": [
+        "此业务必须本人到场办理"
+      ],
+      "agentRestrictions": [
+        {
+          "type": "authorization_validity",
+          "days": 90,
+          "description": "代办授权书有效期为90天"
+        }
+      ],
+      "seniorReview": null,
+      "nextSteps": [
+        "此业务需本人到场办理，请安排本人前来",
+        "请解决代办相关问题后再办理"
+      ],
+      "ruleVersion": {
+        "version": "v2.0",
+        "effectiveDate": "2025-01-01",
+        "applicableCommunities": [
+          "all"
+        ],
+        "communityName": "朝阳社区"
+      },
+      "specialReminders": [
+        "需本人近期一寸免冠彩色照片1张",
+        "需提供本市户籍证明",
+        "年满60周岁即可办理，按周岁计算"
+      ],
+      "ageCheck": {
+        "required": 60,
+        "current": 70,
+        "passed": true
+      },
+      "presenceRequired": true,
+      "isPresent": false,
+      "businessName": "办理",
+      "cardName": "老年卡"
+    },
+    "ruleVersion": "v2.0",
+    "seniorReviewTriggered": false,
+    "canProceedSuccessfully": false,
+    "createdAt": "2026-06-21T08:20:30.822Z"
+  },
+  {
     "id": "17820298353290uc0tb",
     "cardType": "senior_card",
     "businessType": "apply",

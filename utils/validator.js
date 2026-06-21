@@ -1,5 +1,6 @@
 const cardTypes = require('../config/cardTypes');
 const { businessTypeNames, materialNames, communityNames, agentRelationNames } = require('../config/rules');
+const { cancelReasons, timeSlotNames } = require('../config/windows');
 
 function isValidAge(age) {
   if (age === undefined || age === null || age === '') {
@@ -25,11 +26,10 @@ function normalizeMaterials(materials) {
   if (Array.isArray(materials)) {
     return materials.filter(m => m && m !== '').map(m => {
       if (typeof m === 'object' && m !== null) {
-        return {
-          key: m.key || m.type || '',
-          issueDate: m.issueDate || m.date || null,
-          expiryDate: m.expiryDate || null
-        };
+        const result = normalizeMaterialObject(m);
+        if (m.idNumber) result.idNumber = m.idNumber;
+        if (m.cardNumber) result.cardNumber = m.cardNumber;
+        return result;
       }
       return { key: m, issueDate: null, expiryDate: null };
     });
@@ -53,11 +53,14 @@ function normalizeMaterials(materials) {
 }
 
 function normalizeMaterialObject(obj) {
-  return {
+  const result = {
     key: obj.key || obj.type || '',
     issueDate: obj.issueDate || obj.date || null,
     expiryDate: obj.expiryDate || null
   };
+  if (obj.idNumber) result.idNumber = obj.idNumber;
+  if (obj.cardNumber) result.cardNumber = obj.cardNumber;
+  return result;
 }
 
 function validatePresenceAndAgent(isPresent, agentRelation) {
@@ -156,14 +159,17 @@ function validateMaterialDetail(material) {
       errors.push(`材料${material.key}有效期无效：${dateCheck.error}`);
     }
   }
+  const normalized = {
+    key: material.key,
+    issueDate: material.issueDate || null,
+    expiryDate: material.expiryDate || null
+  };
+  if (material.idNumber) normalized.idNumber = material.idNumber;
+  if (material.cardNumber) normalized.cardNumber = material.cardNumber;
   return {
     valid: errors.length === 0,
     errors,
-    normalized: {
-      key: material.key,
-      issueDate: material.issueDate || null,
-      expiryDate: material.expiryDate || null
-    }
+    normalized
   };
 }
 
@@ -245,6 +251,135 @@ function canArchiveSuccessful(result) {
   return true;
 }
 
+function isValidCancelReason(reasonCode) {
+  if (!reasonCode || reasonCode === '') {
+    return { valid: true, isDefault: true, value: 'other' };
+  }
+  if (!cancelReasons[reasonCode]) {
+    return { valid: false, error: `无效的取消原因代码：${reasonCode}` };
+  }
+  return { valid: true, value: reasonCode };
+}
+
+function isValidTimeSlotPreference(preference) {
+  if (!preference || preference === '') {
+    return { valid: true, isDefault: true, value: 'any' };
+  }
+  if (preference === 'any' || timeSlotNames[preference]) {
+    return { valid: true, value: preference };
+  }
+  if (typeof preference === 'string' && /^\d{2}:\d{2}-\d{2}:\d{2}$/.test(preference)) {
+    const [start, end] = preference.split('-');
+    const startHour = parseInt(start.split(':')[0]);
+    const endHour = parseInt(end.split(':')[0]);
+    if (startHour >= 9 && endHour <= 12) {
+      return { valid: true, value: preference, period: 'morning' };
+    }
+    if (startHour >= 13 && endHour <= 17) {
+      return { valid: true, value: preference, period: 'afternoon' };
+    }
+  }
+  return { valid: false, error: `无效的时段偏好：${preference}` };
+}
+
+function validateAppointmentSubmission(body) {
+  const errors = [];
+  const normalized = {};
+
+  const cardCheck = isValidCardType(body.cardType);
+  if (!cardCheck.valid) errors.push(cardCheck.error);
+  else normalized.cardType = body.cardType;
+
+  const businessCheck = isValidBusinessType(body.businessType, body.cardType);
+  if (!businessCheck.valid) errors.push(businessCheck.error);
+  else normalized.businessType = body.businessType;
+
+  const ageCheck = isValidAge(body.age);
+  if (!ageCheck.valid) errors.push(ageCheck.error);
+  else normalized.age = ageCheck.value;
+
+  const presenceCheck = validatePresenceAndAgent(body.isPresent, body.agentRelation);
+  if (!presenceCheck.valid) errors.push(presenceCheck.error);
+  else normalized.isPresent = presenceCheck.isPresent;
+
+  const agentCheck = validateAgentRelation(body.agentRelation);
+  if (!agentCheck.valid) errors.push(agentCheck.error);
+  else normalized.agentRelation = body.agentRelation || null;
+
+  const communityCheck = isValidCommunity(body.communityId);
+  if (!communityCheck.valid) errors.push(communityCheck.error);
+  else normalized.communityId = body.communityId || 'all';
+
+  const dateCheck = isValidDate(body.expectedDate);
+  if (!dateCheck.valid) errors.push(dateCheck.error);
+  else if (dateCheck.value) normalized.expectedDate = dateCheck.value;
+  else normalized.expectedDate = new Date().toISOString().split('T')[0];
+
+  const slotCheck = isValidTimeSlotPreference(body.preferredTimeSlot);
+  if (!slotCheck.valid) errors.push(slotCheck.error);
+  else normalized.preferredTimeSlot = slotCheck.value;
+
+  normalized.materials = normalizeMaterials(body.materials);
+  for (const mat of normalized.materials) {
+    const matCheck = validateMaterialDetail(mat);
+    if (!matCheck.valid) {
+      errors.push(...matCheck.errors);
+    }
+  }
+
+  normalized.materialKeys = normalized.materials.map(m => m.key);
+
+  if (body.applicantName) {
+    normalized.applicantName = String(body.applicantName).trim();
+  }
+  if (body.applicantContact) {
+    normalized.applicantContact = String(body.applicantContact).trim();
+  }
+  if (body.remarks) {
+    normalized.remarks = String(body.remarks).trim();
+  }
+  if (body.operatorId) {
+    normalized.operatorId = String(body.operatorId).trim();
+  }
+  if (body.operatorName) {
+    normalized.operatorName = String(body.operatorName).trim();
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+    normalized
+  };
+}
+
+function validateAppointmentCancel(body) {
+  const errors = [];
+  const normalized = {};
+
+  const reasonCheck = isValidCancelReason(body.reasonCode);
+  if (!reasonCheck.valid) errors.push(reasonCheck.error);
+  else normalized.reasonCode = reasonCheck.value;
+
+  if (body.reason) {
+    normalized.reason = String(body.reason).trim();
+  }
+  if (body.remark) {
+    normalized.remark = String(body.remark).trim();
+  }
+  if (body.operatorId) {
+    normalized.operatorId = String(body.operatorId).trim();
+  }
+  if (body.operatorName) {
+    normalized.operatorName = String(body.operatorName).trim();
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+    normalized
+  };
+}
+
 module.exports = {
   isValidAge,
   normalizeMaterials,
@@ -256,5 +391,9 @@ module.exports = {
   validateMaterialDetail,
   validateAgentRelation,
   validateConsultationSubmission,
-  canArchiveSuccessful
+  canArchiveSuccessful,
+  isValidCancelReason,
+  isValidTimeSlotPreference,
+  validateAppointmentSubmission,
+  validateAppointmentCancel
 };
