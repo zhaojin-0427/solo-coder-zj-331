@@ -7,6 +7,7 @@ const historyRoutes = require('./routes/history');
 const statsRoutes = require('./routes/stats');
 const appointmentRoutes = require('./routes/appointment');
 const homeVisitRoutes = require('./routes/homeVisit');
+const policyAnnouncementRoutes = require('./routes/policyAnnouncement');
 
 const { errorHandler } = require('./utils/response');
 
@@ -34,6 +35,7 @@ app.use('/api/history', historyRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/appointment', appointmentRoutes);
 app.use('/api/home-visit', homeVisitRoutes);
+app.use('/api/policy-announcement', policyAnnouncementRoutes);
 
 app.use(errorHandler);
 

@@ -694,6 +694,174 @@ function validateHomeVisitComplete(body) {
   };
 }
 
+function validatePolicyAnnouncementSubmission(body) {
+  const errors = [];
+  const normalized = {};
+
+  if (!body.title || String(body.title).trim() === '') {
+    errors.push('政策标题不能为空');
+  } else {
+    normalized.title = String(body.title).trim();
+  }
+
+  if (body.applicableCardTypes && Array.isArray(body.applicableCardTypes)) {
+    const validCardTypes = [];
+    for (const ct of body.applicableCardTypes) {
+      if (cardTypes[ct]) {
+        validCardTypes.push(ct);
+      } else {
+        errors.push(`无效的卡证类型：${ct}`);
+      }
+    }
+    normalized.applicableCardTypes = validCardTypes;
+  } else {
+    normalized.applicableCardTypes = [];
+  }
+
+  if (body.applicableBusinessTypes && Array.isArray(body.applicableBusinessTypes)) {
+    const validBusinessTypes = [];
+    for (const bt of body.applicableBusinessTypes) {
+      if (businessTypeNames[bt]) {
+        validBusinessTypes.push(bt);
+      } else {
+        errors.push(`无效的业务类型：${bt}`);
+      }
+    }
+    normalized.applicableBusinessTypes = validBusinessTypes;
+  } else {
+    normalized.applicableBusinessTypes = [];
+  }
+
+  if (body.applicableCommunities && Array.isArray(body.applicableCommunities)) {
+    const validCommunities = [];
+    for (const c of body.applicableCommunities) {
+      if (c === 'all' || communityNames[c]) {
+        validCommunities.push(c);
+      } else {
+        errors.push(`无效的社区编号：${c}`);
+      }
+    }
+    normalized.applicableCommunities = validCommunities;
+  } else {
+    normalized.applicableCommunities = [];
+  }
+
+  if (!body.effectiveDate || body.effectiveDate === '') {
+    errors.push('生效日期不能为空');
+  } else {
+    const effectiveDateCheck = isValidDate(body.effectiveDate);
+    if (!effectiveDateCheck.valid) {
+      errors.push(`生效日期无效：${effectiveDateCheck.error}`);
+    } else {
+      normalized.effectiveDate = effectiveDateCheck.value;
+    }
+  }
+
+  if (body.expiryDate && body.expiryDate !== '') {
+    const expiryDateCheck = isValidDate(body.expiryDate);
+    if (!expiryDateCheck.valid) {
+      errors.push(`失效日期无效：${expiryDateCheck.error}`);
+    } else {
+      normalized.expiryDate = expiryDateCheck.value;
+      if (normalized.effectiveDate && normalized.expiryDate < normalized.effectiveDate) {
+        errors.push('失效日期不能早于生效日期');
+      }
+    }
+  } else {
+    normalized.expiryDate = null;
+  }
+
+  if (body.changeSummary) {
+    normalized.changeSummary = String(body.changeSummary).trim();
+  } else {
+    normalized.changeSummary = '';
+  }
+
+  if (body.affectedMaterials && Array.isArray(body.affectedMaterials)) {
+    const validMaterials = [];
+    for (const m of body.affectedMaterials) {
+      if (materialNames[m]) {
+        validMaterials.push(m);
+      } else {
+        errors.push(`无效的材料类型：${m}`);
+      }
+    }
+    normalized.affectedMaterials = validMaterials;
+  } else {
+    normalized.affectedMaterials = [];
+  }
+
+  if (body.affectedAgeThresholds) {
+    normalized.affectedAgeThresholds = {};
+    if (body.affectedAgeThresholds.newThreshold !== undefined) {
+      const ageCheck = isValidAge(body.affectedAgeThresholds.newThreshold);
+      if (ageCheck.valid) {
+        normalized.affectedAgeThresholds.newThreshold = ageCheck.value;
+      } else {
+        errors.push(`新的年龄门槛无效：${ageCheck.error}`);
+      }
+    }
+    if (body.affectedAgeThresholds.newAgeRequirement !== undefined) {
+      const ageCheck = isValidAge(body.affectedAgeThresholds.newAgeRequirement);
+      if (ageCheck.valid) {
+        normalized.affectedAgeThresholds.newAgeRequirement = ageCheck.value;
+      } else {
+        errors.push(`新的年龄要求无效：${ageCheck.error}`);
+      }
+    }
+  } else {
+    normalized.affectedAgeThresholds = null;
+  }
+
+  if (body.affectedAgentRestrictions) {
+    normalized.affectedAgentRestrictions = {};
+    if (body.affectedAgentRestrictions.newAllowedAgents && Array.isArray(body.affectedAgentRestrictions.newAllowedAgents)) {
+      const validAgents = [];
+      for (const a of body.affectedAgentRestrictions.newAllowedAgents) {
+        if (agentRelationNames[a]) {
+          validAgents.push(a);
+        } else {
+          errors.push(`无效的代办关系：${a}`);
+        }
+      }
+      normalized.affectedAgentRestrictions.newAllowedAgents = validAgents;
+    }
+    if (body.affectedAgentRestrictions.newMustBePresent !== undefined) {
+      normalized.affectedAgentRestrictions.newMustBePresent = body.affectedAgentRestrictions.newMustBePresent === true || body.affectedAgentRestrictions.newMustBePresent === 'true';
+    }
+  } else {
+    normalized.affectedAgentRestrictions = null;
+  }
+
+  if (body.operationGuide) {
+    normalized.operationGuide = String(body.operationGuide).trim();
+  } else {
+    normalized.operationGuide = '';
+  }
+
+  if (body.parentAnnouncementId) {
+    normalized.parentAnnouncementId = String(body.parentAnnouncementId).trim();
+  } else {
+    normalized.parentAnnouncementId = null;
+  }
+
+  if (body.operatorId) {
+    normalized.operatorId = String(body.operatorId).trim();
+  }
+  if (body.operatorName) {
+    normalized.operatorName = String(body.operatorName).trim();
+  }
+  if (body.remarks) {
+    normalized.remarks = String(body.remarks).trim();
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+    normalized
+  };
+}
+
 module.exports = {
   isValidAge,
   normalizeMaterials,
@@ -719,5 +887,6 @@ module.exports = {
   validateHomeVisitCancel,
   validateHomeVisitDispatch,
   validateHomeVisitReassign,
-  validateHomeVisitComplete
+  validateHomeVisitComplete,
+  validatePolicyAnnouncementSubmission
 };
