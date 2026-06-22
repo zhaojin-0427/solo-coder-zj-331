@@ -1,0 +1,352 @@
+[
+  {
+    "id": "HVO1782090106185IMSJLB",
+    "cardType": "bus_card",
+    "cardName": "公交卡",
+    "businessType": "annual_review",
+    "businessName": "年审",
+    "age": 68,
+    "mobilityLevel": "mild",
+    "mobilityLevelName": "轻度不便",
+    "address": "朝阳社区1号楼1单元101",
+    "contactPerson": "李奶奶",
+    "contactPhone": "13900139000",
+    "availableDates": [
+      "2026-06-25"
+    ],
+    "preferredTimeSlot": "afternoon",
+    "communityId": "community_001",
+    "communityName": "朝阳社区",
+    "expectedDate": "2026-06-25",
+    "expectedTimeSlot": "15:00-16:00",
+    "expectedTimePeriod": "afternoon",
+    "agentRelation": "spouse",
+    "agentRelationName": "配偶",
+    "materials": [
+      {
+        "key": "id_card",
+        "issueDate": null,
+        "expiryDate": null,
+        "idNumber": "110101195001011234"
+      },
+      {
+        "key": "bus_card",
+        "issueDate": null,
+        "expiryDate": null
+      },
+      {
+        "key": "agent_id_card",
+        "issueDate": null,
+        "expiryDate": null
+      },
+      {
+        "key": "proof_of_relationship",
+        "issueDate": null,
+        "expiryDate": null
+      },
+      {
+        "key": "agent_authorization",
+        "issueDate": null,
+        "expiryDate": null
+      }
+    ],
+    "materialKeys": [
+      "id_card",
+      "bus_card",
+      "agent_id_card",
+      "proof_of_relationship",
+      "agent_authorization"
+    ],
+    "idCardKey": "110101195001011234",
+    "applicantName": "李奶奶",
+    "isReviewRequired": false,
+    "needsDualVerify": false,
+    "needsReviewerCompanion": false,
+    "materialRiskLevel": "low",
+    "materialRiskLevelName": "低风险",
+    "estimatedServiceMinutes": 22,
+    "estimatedTotalMinutes": 37,
+    "assignedStaffId": "FS001",
+    "assignedStaffName": "张外勤",
+    "assignedStaffPhone": "13800000001",
+    "secondaryStaffId": null,
+    "secondaryStaffName": null,
+    "status": "on_site",
+    "statusName": "上门中",
+    "statusHistory": [
+      {
+        "status": "pending_dispatch",
+        "time": "2026-06-22T01:01:46.185Z",
+        "operatorId": "system",
+        "operatorName": "系统",
+        "remark": "创建上门工单"
+      },
+      {
+        "status": "dispatched",
+        "time": "2026-06-22T01:02:19.068Z",
+        "operatorId": "admin",
+        "operatorName": "管理员",
+        "remark": "派单给张外勤"
+      },
+      {
+        "status": "on_site",
+        "time": "2026-06-22T01:02:19.612Z",
+        "operatorId": "FS001",
+        "operatorName": "张外勤",
+        "remark": "开始上门服务"
+      }
+    ],
+    "failReasonCodes": [],
+    "failReasons": [],
+    "cancelReasonCode": null,
+    "cancelReason": null,
+    "cannotDispatchReasons": [],
+    "supplementaryMaterials": [],
+    "riskTips": [],
+    "windowSuggestions": [],
+    "completionResult": null,
+    "completedAt": null,
+    "completedBy": null,
+    "transferredToWindow": false,
+    "transferReason": null,
+    "operatorId": "system",
+    "operatorName": "系统",
+    "remarks": null,
+    "evaluationSnapshot": {
+      "canDispatch": true,
+      "rulePassed": true,
+      "recommendedStaff": {
+        "staffId": "FS002",
+        "name": "李外勤",
+        "phone": "13800000002",
+        "communities": [
+          "community_001",
+          "community_003"
+        ],
+        "skills": [
+          "bus_card",
+          "senior_card"
+        ],
+        "businessTypes": [
+          "apply",
+          "reissue",
+          "annual_review"
+        ],
+        "canReview": false,
+        "workDays": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "dailyCapacity": 4,
+        "status": "active",
+        "dailyLoad": 0,
+        "loadRatio": 0,
+        "remainingCapacity": 4,
+        "score": 100
+      },
+      "recommendedTimeSlot": {
+        "slot": "15:00-16:00",
+        "period": "afternoon",
+        "periodName": "下午",
+        "startTime": "15:00",
+        "endTime": "16:00",
+        "score": 90,
+        "available": true
+      },
+      "materialRiskLevel": {
+        "level": "low",
+        "name": "低风险",
+        "description": "材料齐全且风险低",
+        "score": 1,
+        "needsDualVerify": false,
+        "needsReviewer": false
+      },
+      "riskTips": [],
+      "serviceScopeCheck": {
+        "inScope": true,
+        "communityId": "community_001",
+        "communityName": "朝阳社区",
+        "serviceArea": "朝阳社区全域",
+        "avgTravelTimeMinutes": 15,
+        "dailyMaxOrders": 10
+      }
+    },
+    "createdAt": "2026-06-22T01:01:46.185Z",
+    "updatedAt": "2026-06-22T01:02:19.612Z",
+    "dispatchedAt": "2026-06-22T01:02:19.068Z",
+    "dispatchedBy": {
+      "operatorId": "admin",
+      "operatorName": "管理员"
+    },
+    "arrivedAt": "2026-06-22T01:02:19.612Z"
+  },
+  {
+    "id": "HVO1782090078311IY6MTL",
+    "cardType": "bus_card",
+    "cardName": "公交卡",
+    "businessType": "annual_review",
+    "businessName": "年审",
+    "age": 68,
+    "mobilityLevel": "mild",
+    "mobilityLevelName": "轻度不便",
+    "address": "朝阳社区1号楼1单元101",
+    "contactPerson": "李奶奶",
+    "contactPhone": "13900139000",
+    "availableDates": [
+      "2026-06-25"
+    ],
+    "preferredTimeSlot": "afternoon",
+    "communityId": "community_001",
+    "communityName": "朝阳社区",
+    "expectedDate": "2026-06-25",
+    "expectedTimeSlot": "15:00-16:00",
+    "expectedTimePeriod": "afternoon",
+    "agentRelation": "spouse",
+    "agentRelationName": "配偶",
+    "materials": [
+      {
+        "key": "id_card",
+        "issueDate": null,
+        "expiryDate": null,
+        "idNumber": "110101195001011234"
+      },
+      {
+        "key": "bus_card",
+        "issueDate": null,
+        "expiryDate": null
+      },
+      {
+        "key": "agent_id_card",
+        "issueDate": null,
+        "expiryDate": null
+      },
+      {
+        "key": "proof_of_relationship",
+        "issueDate": null,
+        "expiryDate": null
+      },
+      {
+        "key": "agent_authorization",
+        "issueDate": null,
+        "expiryDate": null
+      }
+    ],
+    "materialKeys": [
+      "id_card",
+      "bus_card",
+      "agent_id_card",
+      "proof_of_relationship",
+      "agent_authorization"
+    ],
+    "idCardKey": "110101195001011234",
+    "applicantName": "李奶奶",
+    "isReviewRequired": false,
+    "needsDualVerify": false,
+    "needsReviewerCompanion": false,
+    "materialRiskLevel": "low",
+    "materialRiskLevelName": "低风险",
+    "estimatedServiceMinutes": 22,
+    "estimatedTotalMinutes": 37,
+    "assignedStaffId": "FS001",
+    "assignedStaffName": "张外勤",
+    "assignedStaffPhone": "13800000001",
+    "secondaryStaffId": null,
+    "secondaryStaffName": null,
+    "status": "pending_dispatch",
+    "statusName": "待派单",
+    "statusHistory": [
+      {
+        "status": "pending_dispatch",
+        "time": "2026-06-22T01:01:18.311Z",
+        "operatorId": "system",
+        "operatorName": "系统",
+        "remark": "创建上门工单"
+      }
+    ],
+    "failReasonCodes": [],
+    "failReasons": [],
+    "cancelReasonCode": null,
+    "cancelReason": null,
+    "cannotDispatchReasons": [],
+    "supplementaryMaterials": [],
+    "riskTips": [],
+    "windowSuggestions": [],
+    "completionResult": null,
+    "completedAt": null,
+    "completedBy": null,
+    "transferredToWindow": false,
+    "transferReason": null,
+    "operatorId": "system",
+    "operatorName": "系统",
+    "remarks": null,
+    "evaluationSnapshot": {
+      "canDispatch": true,
+      "rulePassed": true,
+      "recommendedStaff": {
+        "staffId": "FS001",
+        "name": "张外勤",
+        "phone": "13800000001",
+        "communities": [
+          "community_001",
+          "community_002"
+        ],
+        "skills": [
+          "bus_card",
+          "senior_card",
+          "medical_card"
+        ],
+        "businessTypes": [
+          "apply",
+          "reissue",
+          "report_loss",
+          "annual_review"
+        ],
+        "canReview": true,
+        "workDays": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "dailyCapacity": 5,
+        "status": "active",
+        "dailyLoad": 0,
+        "loadRatio": 0,
+        "remainingCapacity": 5,
+        "score": 110
+      },
+      "recommendedTimeSlot": {
+        "slot": "15:00-16:00",
+        "period": "afternoon",
+        "periodName": "下午",
+        "startTime": "15:00",
+        "endTime": "16:00",
+        "score": 90,
+        "available": true
+      },
+      "materialRiskLevel": {
+        "level": "low",
+        "name": "低风险",
+        "description": "材料齐全且风险低",
+        "score": 1,
+        "needsDualVerify": false,
+        "needsReviewer": false
+      },
+      "riskTips": [],
+      "serviceScopeCheck": {
+        "inScope": true,
+        "communityId": "community_001",
+        "communityName": "朝阳社区",
+        "serviceArea": "朝阳社区全域",
+        "avgTravelTimeMinutes": 15,
+        "dailyMaxOrders": 10
+      }
+    },
+    "createdAt": "2026-06-22T01:01:18.311Z",
+    "updatedAt": "2026-06-22T01:01:18.311Z"
+  }
+]

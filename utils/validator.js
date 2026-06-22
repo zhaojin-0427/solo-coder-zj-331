@@ -1,6 +1,7 @@
 const cardTypes = require('../config/cardTypes');
 const { businessTypeNames, materialNames, communityNames, agentRelationNames } = require('../config/rules');
 const { cancelReasons, timeSlotNames } = require('../config/windows');
+const { mobilityLevels, homeVisitCancelReasons, homeVisitTimeSlotNames, fieldStaff } = require('../config/homeVisit');
 
 function isValidAge(age) {
   if (age === undefined || age === null || age === '') {
@@ -386,6 +387,300 @@ function validateAppointmentCancel(body) {
   };
 }
 
+function isValidMobilityLevel(level) {
+  if (!level || level === '') {
+    return { valid: true, isDefault: true, value: 'normal' };
+  }
+  if (!mobilityLevels[level]) {
+    return { valid: false, error: `无效的行动能力等级：${level}` };
+  }
+  return { valid: true, value: level };
+}
+
+function isValidHomeVisitCancelReason(reasonCode) {
+  if (!reasonCode || reasonCode === '') {
+    return { valid: true, isDefault: true, value: 'other' };
+  }
+  if (!homeVisitCancelReasons[reasonCode]) {
+    return { valid: false, error: `无效的取消原因代码：${reasonCode}` };
+  }
+  return { valid: true, value: reasonCode };
+}
+
+function isValidHomeVisitTimeSlot(preference) {
+  if (!preference || preference === '') {
+    return { valid: true, isDefault: true, value: 'any' };
+  }
+  if (preference === 'any' || homeVisitTimeSlotNames[preference]) {
+    return { valid: true, value: preference };
+  }
+  if (typeof preference === 'string' && /^\d{2}:\d{2}-\d{2}:\d{2}$/.test(preference)) {
+    const [start, end] = preference.split('-');
+    const startHour = parseInt(start.split(':')[0]);
+    const endHour = parseInt(end.split(':')[0]);
+    if (startHour >= 9 && endHour <= 12) {
+      return { valid: true, value: preference, period: 'morning' };
+    }
+    if (startHour >= 14 && endHour <= 17) {
+      return { valid: true, value: preference, period: 'afternoon' };
+    }
+  }
+  return { valid: false, error: `无效的上门时段偏好：${preference}` };
+}
+
+function isValidStaffId(staffId) {
+  if (!staffId || staffId === '') {
+    return { valid: false, error: '外勤人员ID不能为空' };
+  }
+  const staff = fieldStaff.find(s => s.staffId === staffId);
+  if (!staff) {
+    return { valid: false, error: `无效的外勤人员ID：${staffId}` };
+  }
+  return { valid: true, value: staffId };
+}
+
+function validateAvailableDates(dates) {
+  if (!dates) {
+    return { valid: false, error: '可上门日期不能为空' };
+  }
+  if (!Array.isArray(dates)) {
+    return { valid: false, error: '可上门日期必须为数组' };
+  }
+  if (dates.length === 0) {
+    return { valid: false, error: '请至少选择一个可上门日期' };
+  }
+  const normalized = [];
+  const errors = [];
+  for (const dateStr of dates) {
+    const dateCheck = isValidDate(dateStr);
+    if (!dateCheck.valid) {
+      errors.push(`无效的日期：${dateStr} - ${dateCheck.error}`);
+    } else if (dateCheck.value) {
+      normalized.push(dateCheck.value);
+    }
+  }
+  if (normalized.length === 0 && errors.length === 0) {
+    errors.push('请至少提供一个有效的可上门日期');
+  }
+  return {
+    valid: errors.length === 0,
+    errors,
+    normalized
+  };
+}
+
+function validateHomeVisitSubmission(body) {
+  const errors = [];
+  const normalized = {};
+
+  const cardCheck = isValidCardType(body.cardType);
+  if (!cardCheck.valid) errors.push(cardCheck.error);
+  else normalized.cardType = body.cardType;
+
+  const businessCheck = isValidBusinessType(body.businessType, body.cardType);
+  if (!businessCheck.valid) errors.push(businessCheck.error);
+  else normalized.businessType = body.businessType;
+
+  const ageCheck = isValidAge(body.age);
+  if (!ageCheck.valid) errors.push(ageCheck.error);
+  else normalized.age = ageCheck.value;
+
+  const mobilityCheck = isValidMobilityLevel(body.mobilityLevel);
+  if (!mobilityCheck.valid) errors.push(mobilityCheck.error);
+  else normalized.mobilityLevel = mobilityCheck.value;
+
+  if (!body.address || body.address === '') {
+    errors.push('居住地址不能为空');
+  } else {
+    normalized.address = String(body.address).trim();
+  }
+
+  if (!body.contactPerson || body.contactPerson === '') {
+    errors.push('联系人姓名不能为空');
+  } else {
+    normalized.contactPerson = String(body.contactPerson).trim();
+  }
+
+  if (!body.contactPhone || body.contactPhone === '') {
+    errors.push('联系电话不能为空');
+  } else {
+    normalized.contactPhone = String(body.contactPhone).trim();
+  }
+
+  const datesCheck = validateAvailableDates(body.availableDates);
+  if (!datesCheck.valid) {
+    errors.push(...datesCheck.errors);
+  } else {
+    normalized.availableDates = datesCheck.normalized;
+  }
+
+  const slotCheck = isValidHomeVisitTimeSlot(body.preferredTimeSlot);
+  if (!slotCheck.valid) errors.push(slotCheck.error);
+  else normalized.preferredTimeSlot = slotCheck.value;
+
+  const agentCheck = validateAgentRelation(body.agentRelation);
+  if (!agentCheck.valid) errors.push(agentCheck.error);
+  else normalized.agentRelation = body.agentRelation || null;
+
+  const communityCheck = isValidCommunity(body.communityId);
+  if (!communityCheck.valid) errors.push(communityCheck.error);
+  else normalized.communityId = body.communityId || 'all';
+
+  normalized.materials = normalizeMaterials(body.materials);
+  for (const mat of normalized.materials) {
+    const matCheck = validateMaterialDetail(mat);
+    if (!matCheck.valid) {
+      errors.push(...matCheck.errors);
+    }
+  }
+
+  normalized.materialKeys = normalized.materials.map(m => m.key);
+
+  if (body.applicantName) {
+    normalized.applicantName = String(body.applicantName).trim();
+  }
+  if (body.remarks) {
+    normalized.remarks = String(body.remarks).trim();
+  }
+  if (body.operatorId) {
+    normalized.operatorId = String(body.operatorId).trim();
+  }
+  if (body.operatorName) {
+    normalized.operatorName = String(body.operatorName).trim();
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+    normalized
+  };
+}
+
+function validateHomeVisitCancel(body) {
+  const errors = [];
+  const normalized = {};
+
+  const reasonCheck = isValidHomeVisitCancelReason(body.reasonCode);
+  if (!reasonCheck.valid) errors.push(reasonCheck.error);
+  else normalized.reasonCode = reasonCheck.value;
+
+  if (body.reason) {
+    normalized.reason = String(body.reason).trim();
+  }
+  if (body.remark) {
+    normalized.remark = String(body.remark).trim();
+  }
+  if (body.operatorId) {
+    normalized.operatorId = String(body.operatorId).trim();
+  }
+  if (body.operatorName) {
+    normalized.operatorName = String(body.operatorName).trim();
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+    normalized
+  };
+}
+
+function validateHomeVisitDispatch(body) {
+  const errors = [];
+  const normalized = {};
+
+  const staffCheck = isValidStaffId(body.staffId);
+  if (!staffCheck.valid) errors.push(staffCheck.error);
+  else normalized.staffId = staffCheck.value;
+
+  if (body.operatorId) {
+    normalized.operatorId = String(body.operatorId).trim();
+  }
+  if (body.operatorName) {
+    normalized.operatorName = String(body.operatorName).trim();
+  }
+  if (body.remark) {
+    normalized.remark = String(body.remark).trim();
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+    normalized
+  };
+}
+
+function validateHomeVisitReassign(body) {
+  const errors = [];
+  const normalized = {};
+
+  const staffCheck = isValidStaffId(body.newStaffId);
+  if (!staffCheck.valid) errors.push(staffCheck.error);
+  else normalized.newStaffId = staffCheck.value;
+
+  if (body.operatorId) {
+    normalized.operatorId = String(body.operatorId).trim();
+  }
+  if (body.operatorName) {
+    normalized.operatorName = String(body.operatorName).trim();
+  }
+  if (body.remark) {
+    normalized.remark = String(body.remark).trim();
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+    normalized
+  };
+}
+
+function validateHomeVisitComplete(body) {
+  const errors = [];
+  const normalized = {};
+
+  normalized.isSuccess = body.isSuccess !== undefined ? (body.isSuccess === true || body.isSuccess === 'true') : true;
+
+  if (body.failureReason) {
+    normalized.failureReason = String(body.failureReason).trim();
+  }
+  if (body.transferredToWindow !== undefined) {
+    normalized.transferredToWindow = body.transferredToWindow === true || body.transferredToWindow === 'true';
+  }
+  if (body.transferReason) {
+    normalized.transferReason = String(body.transferReason).trim();
+  }
+  if (body.actualServiceMinutes) {
+    const mins = Number(body.actualServiceMinutes);
+    if (!isNaN(mins) && mins > 0) {
+      normalized.actualServiceMinutes = Math.round(mins);
+    }
+  }
+  if (body.materialsVerified && Array.isArray(body.materialsVerified)) {
+    normalized.materialsVerified = body.materialsVerified;
+  }
+  if (body.materialsMissing && Array.isArray(body.materialsMissing)) {
+    normalized.materialsMissing = body.materialsMissing;
+  }
+  if (body.notes) {
+    normalized.notes = String(body.notes).trim();
+  }
+  if (body.nextWindowSuggestion) {
+    normalized.nextWindowSuggestion = String(body.nextWindowSuggestion).trim();
+  }
+  if (body.operatorId) {
+    normalized.operatorId = String(body.operatorId).trim();
+  }
+  if (body.operatorName) {
+    normalized.operatorName = String(body.operatorName).trim();
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+    normalized
+  };
+}
+
 module.exports = {
   isValidAge,
   normalizeMaterials,
@@ -401,5 +696,15 @@ module.exports = {
   isValidCancelReason,
   isValidTimeSlotPreference,
   validateAppointmentSubmission,
-  validateAppointmentCancel
+  validateAppointmentCancel,
+  isValidMobilityLevel,
+  isValidHomeVisitCancelReason,
+  isValidHomeVisitTimeSlot,
+  isValidStaffId,
+  validateAvailableDates,
+  validateHomeVisitSubmission,
+  validateHomeVisitCancel,
+  validateHomeVisitDispatch,
+  validateHomeVisitReassign,
+  validateHomeVisitComplete
 };
