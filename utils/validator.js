@@ -134,11 +134,24 @@ function isValidDate(dateStr) {
   if (!dateStr || dateStr === '') {
     return { valid: true, isDefault: true };
   }
-  const date = new Date(dateStr);
-  if (isNaN(date.getTime())) {
-    return { valid: false, error: `无效的日期格式：${dateStr}` };
+  if (typeof dateStr !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    return { valid: false, error: `无效的日期格式：${dateStr}，请使用YYYY-MM-DD格式` };
   }
-  return { valid: true, value: date.toISOString().split('T')[0] };
+  const [yearStr, monthStr, dayStr] = dateStr.split('-');
+  const year = parseInt(yearStr);
+  const month = parseInt(monthStr);
+  const day = parseInt(dayStr);
+  if (year < 1900 || year > 2100) {
+    return { valid: false, error: `年份超出有效范围：${yearStr}` };
+  }
+  if (month < 1 || month > 12) {
+    return { valid: false, error: `月份无效：${monthStr}` };
+  }
+  const date = new Date(year, month - 1, day);
+  if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
+    return { valid: false, error: `日期无效：${dateStr}（该日期不存在）` };
+  }
+  return { valid: true, value: dateStr };
 }
 
 function validateMaterialDetail(material) {

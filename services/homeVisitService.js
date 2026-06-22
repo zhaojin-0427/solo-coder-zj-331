@@ -66,6 +66,42 @@ function daysBetween(date1, date2) {
   return Math.ceil(Math.abs(d2 - d1) / (1000 * 60 * 60 * 24));
 }
 
+function isValidDateFormat(dateStr) {
+  if (!dateStr || typeof dateStr !== 'string') return false;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return false;
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return false;
+  const year = parseInt(dateStr.split('-')[0]);
+  const month = parseInt(dateStr.split('-')[1]);
+  const day = parseInt(dateStr.split('-')[2]);
+  if (date.getFullYear() !== year) return false;
+  if (date.getMonth() + 1 !== month) return false;
+  if (date.getDate() !== day) return false;
+  return true;
+}
+
+function extractBuildingFromAddress(address) {
+  if (!address || typeof address !== 'string') return null;
+  const patterns = [
+    /(\d+号楼)/,
+    /([A-Z]栋)/,
+    /(\d+栋)/,
+    /(东区|西区|南区|北区)/
+  ];
+  for (const pattern of patterns) {
+    const match = address.match(pattern);
+    if (match) return match[1];
+  }
+  return null;
+}
+
+function isAddressInServiceScope(address, serviceScope) {
+  if (!serviceScope || !serviceScope.coveredBuildings) return true;
+  const building = extractBuildingFromAddress(address);
+  if (!building) return true;
+  return serviceScope.coveredBuildings.includes(building);
+}
+
 function extractIdCardKey(materials) {
   if (!materials || !Array.isArray(materials)) return null;
   const idCard = materials.find(m => m.key === 'id_card');
@@ -186,6 +222,41 @@ function evaluateHomeVisit(params) {
     return result;
   }
 
+  const building = extractBuildingFromAddress(address);
+  const addressInScope = isAddressInServiceScope(address, serviceScope);
+  result.serviceScopeCheck.building = building;
+  result.serviceScopeCheck.coveredBuildings = serviceScope.coveredBuildings;
+  result.serviceScopeCheck.addressInScope = addressInScope;
+
+  if (!addressInScope) {
+    result.cannotDispatchReasons.push(`地址楼栋（${building || '未识别'}）不在社区上门服务范围内，覆盖楼栋：${serviceScope.coveredBuildings.join('、')}`);
+    result.windowSuggestions.push(`当前地址不在上门服务范围内，建议前往${communityNames[communityId] || '社区'}服务中心窗口办理`);
+    return result;
+  }
+
+  const today = new Date().toISOString().split('T')[0];
+  const validDates = [];
+  const invalidDates = [];
+  for (const d of (availableDates || [])) {
+    if (!isValidDateFormat(d)) {
+      invalidDates.push(d);
+    } else if (d < today) {
+      invalidDates.push(d + '(日期早于今日)');
+    } else if (daysBetween(today, d) > 30) {
+      invalidDates.push(d + '(日期超过30天)');
+    } else {
+      validDates.push(d);
+    }
+  }
+
+  if (invalidDates.length > 0 && validDates.length === 0) {
+    result.cannotDispatchReasons.push(`所有上门日期无效：${invalidDates.join('、')}`);
+    result.windowSuggestions.push('请选择有效的上门日期（1-30天内），或前往窗口办理');
+    return result;
+  }
+
+  const effectiveDates = validDates.length > 0 ? validDates : availableDates;
+
   const ruleResult = matchRule(cardType, businessType, {
     age,
     isPresent: false,
@@ -193,7 +264,7 @@ function evaluateHomeVisit(params) {
     materialKeys,
     materials,
     communityId,
-    handleDate: availableDates && availableDates.length > 0 ? availableDates[0] : new Date().toISOString().split('T')[0]
+    handleDate: effectiveDates && effectiveDates.length > 0 ? effectiveDates[0] : today
   });
 
   result.ruleCheckResult = {
@@ -233,9 +304,23 @@ function evaluateHomeVisit(params) {
     );
   }
 
-  if (!ruleResult.canProceed && missingCount > 2) {
-    result.cannotDispatchReasons.push('材料缺失较多，建议先到窗口办理');
+  if (!result.rulePassed) {
+    if (missingCount > 0) {
+      result.cannotDispatchReasons.push(`材料缺失或已过期${missingCount}项，规则校验未通过，建议先补齐材料`);
+    } else {
+      result.cannotDispatchReasons.push('规则校验未通过，不支持上门办理');
+    }
+    if (ruleResult.errors && ruleResult.errors.length > 0) {
+      result.cannotDispatchReasons.push(...ruleResult.errors.slice(0, 3));
+    }
+    result.windowSuggestions.push('请补充材料后重新申请，或携带完整材料前往社区服务中心窗口办理');
+    return result;
+  }
+
+  if (!ruleResult.canProceed && missingCount >= 2) {
+    result.cannotDispatchReasons.push(`材料缺失较多（${missingCount}项），建议先到窗口办理`);
     result.windowSuggestions.push('材料缺失较多，建议携带完整材料前往社区服务中心窗口办理');
+    return result;
   }
 
   if (riskLevel.level === 'critical') {
@@ -272,19 +357,9 @@ function evaluateHomeVisit(params) {
   );
   result.estimatedTotalMinutes = result.estimatedServiceMinutes + serviceScope.avgTravelTimeMinutes;
 
-  const bestDate = availableDates && availableDates.length > 0 ? availableDates[0] : null;
+  const bestDate = effectiveDates && effectiveDates.length > 0 ? effectiveDates[0] : null;
   if (!bestDate) {
-    result.cannotDispatchReasons.push('请选择可上门日期');
-    return result;
-  }
-
-  const today = new Date().toISOString().split('T')[0];
-  if (bestDate < today) {
-    result.cannotDispatchReasons.push('上门日期不能早于今日');
-    return result;
-  }
-  if (daysBetween(today, bestDate) > 30) {
-    result.cannotDispatchReasons.push('上门日期不能超过30天');
+    result.cannotDispatchReasons.push('请选择有效的可上门日期');
     return result;
   }
 
@@ -328,11 +403,23 @@ function evaluateHomeVisit(params) {
   result.alternativeStaff = staffWithLoad.slice(1, 4);
 
   const allSlots = getAllHomeVisitTimeSlots();
-  const preferredPeriod = preferredTimeSlot === 'morning' ? 'morning' :
-    preferredTimeSlot === 'afternoon' ? 'afternoon' : 'any';
+  const isExactSlot = typeof preferredTimeSlot === 'string' && /^\d{2}:\d{2}-\d{2}:\d{2}$/.test(preferredTimeSlot);
+  let preferredPeriod = 'any';
+  if (preferredTimeSlot === 'morning' || preferredTimeSlot === 'afternoon') {
+    preferredPeriod = preferredTimeSlot;
+  } else if (isExactSlot) {
+    const [start] = preferredTimeSlot.split('-');
+    const startHour = parseInt(start.split(':')[0]);
+    preferredPeriod = (startHour >= 9 && startHour < 12) ? 'morning' : 'afternoon';
+  }
+
+  const exactMatchedSlot = isExactSlot ? allSlots.find(s => s.slot === preferredTimeSlot) : null;
 
   const scoredSlots = allSlots.map(slot => {
     let score = 50;
+    if (isExactSlot && slot.slot === preferredTimeSlot) {
+      score += 200;
+    }
     if (preferredPeriod !== 'any' && slot.period === preferredPeriod) {
       score += 30;
     }
@@ -345,6 +432,12 @@ function evaluateHomeVisit(params) {
       available: true
     };
   }).sort((a, b) => b.score - a.score);
+
+  if (isExactSlot && !exactMatchedSlot) {
+    result.cannotDispatchReasons.push(`所选精确时段（${preferredTimeSlot}）不在可用时段范围内`);
+    result.windowSuggestions.push('请选择上午(09:00-12:00)或下午(14:00-17:00)的有效时段');
+    return result;
+  }
 
   result.recommendedTimeSlot = scoredSlots[0] || null;
   result.alternativeTimeSlots = scoredSlots.slice(1, 4);
@@ -494,8 +587,8 @@ function createHomeVisitOrder(params) {
     ],
     failReasonCodes: evaluation.canDispatch ? [] : determineFailReasons(evaluation),
     failReasons: evaluation.canDispatch ? [] : evaluation.cannotDispatchReasons,
-    cancelReasonCode: evaluation.canDispatch ? null : 'other',
-    cancelReason: evaluation.canDispatch ? null : evaluation.cannotDispatchReasons[0] || '无法派单',
+    cancelReasonCode: evaluation.canDispatch ? null : determineCancelReasonCode(evaluation),
+    cancelReason: evaluation.canDispatch ? null : evaluation.cannotDispatchReasons.join('；') || '无法派单',
     cannotDispatchReasons: evaluation.cannotDispatchReasons,
     supplementaryMaterials: evaluation.supplementaryMaterials,
     riskTips: evaluation.riskTips,
@@ -534,13 +627,37 @@ function createHomeVisitOrder(params) {
 function determineFailReasons(evaluation) {
   const reasons = [];
   if (!evaluation.serviceScopeCheck?.inScope) reasons.push('out_of_service_scope');
+  if (evaluation.serviceScopeCheck?.addressInScope === false) reasons.push('out_of_service_scope');
   if (evaluation.cannotDispatchReasons.some(r => r.includes('外勤人员'))) reasons.push('no_available_staff');
   if (evaluation.cannotDispatchReasons.some(r => r.includes('容量已满'))) reasons.push('daily_capacity_full');
   if (evaluation.materialRiskLevel?.level === 'critical') reasons.push('high_risk_requires_window');
-  if (evaluation.supplementaryMaterials?.length > 2) reasons.push('material_insufficient');
+  if (evaluation.supplementaryMaterials?.length > 0) reasons.push('material_insufficient');
+  if (evaluation.cannotDispatchReasons.some(r => r.includes('材料') && r.includes('缺'))) reasons.push('material_insufficient');
+  if (evaluation.cannotDispatchReasons.some(r => r.includes('规则校验'))) reasons.push('material_insufficient');
   if (evaluation.cannotDispatchReasons.some(r => r.includes('日期'))) reasons.push('date_invalid');
+  if (evaluation.cannotDispatchReasons.some(r => r.includes('时段'))) reasons.push('date_invalid');
   if (reasons.length === 0) reasons.push('other');
-  return reasons;
+  return [...new Set(reasons)];
+}
+
+function determineCancelReasonCode(evaluation) {
+  if (!evaluation.serviceScopeCheck?.inScope || evaluation.serviceScopeCheck?.addressInScope === false) {
+    return 'out_of_scope';
+  }
+  if (evaluation.cannotDispatchReasons.some(r => r.includes('日期') || r.includes('时段'))) {
+    return 'schedule_conflict';
+  }
+  if (evaluation.cannotDispatchReasons.some(r => r.includes('外勤人员'))) {
+    return 'staff_unavailable';
+  }
+  if (evaluation.supplementaryMaterials?.length > 0 ||
+      evaluation.cannotDispatchReasons.some(r => r.includes('材料') || r.includes('规则校验'))) {
+    return 'material_missing';
+  }
+  if (evaluation.materialRiskLevel?.level === 'critical') {
+    return 'transferred_to_window';
+  }
+  return 'other';
 }
 
 function dispatchOrder(id, staffId, operatorId = 'system', operatorName = '系统', remark = null) {
