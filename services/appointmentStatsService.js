@@ -1,5 +1,5 @@
 const { getAppointmentsForStats, cancelReasons } = require('./appointmentService');
-const { appointmentStatus, appointmentStatusNames, getCommunityWindowConfig, windowTypes } = require('../config/windows');
+const { appointmentStatus, appointmentStatusNames, failReasons, getCommunityWindowConfig, windowTypes } = require('../config/windows');
 const { communityNames, businessTypeNames, agentRelationNames } = require('../config/rules');
 const cardTypes = require('../config/cardTypes');
 
@@ -17,6 +17,7 @@ function getCommunityAppointmentStats(filters = {}) {
       confirmedCount: 0,
       cancelledCount: 0,
       expiredCount: 0,
+      failedCount: 0,
       reviewCount: 0,
       agentCount: 0,
       successRate: 0
@@ -31,12 +32,13 @@ function getCommunityAppointmentStats(filters = {}) {
     if (rec.status === appointmentStatus.CONFIRMED) s.confirmedCount++;
     if (rec.status === appointmentStatus.CANCELLED) s.cancelledCount++;
     if (rec.status === appointmentStatus.EXPIRED) s.expiredCount++;
+    if (rec.status === appointmentStatus.FAILED) s.failedCount++;
     if (rec.isReviewRequired) s.reviewCount++;
     if (rec.isAgent) s.agentCount++;
   }
 
   for (const s of Object.values(stats)) {
-    const validTotal = s.total - s.cancelledCount - s.expiredCount;
+    const validTotal = s.total - s.cancelledCount - s.expiredCount - s.failedCount;
     if (validTotal > 0) {
       s.successRate = Number((((s.confirmedCount + s.pendingCount) / validTotal) * 100).toFixed(2));
     }
@@ -163,18 +165,36 @@ function getAverageWaitTimeStats(filters = {}) {
 function getCannotReserveReasonRanking(filters = {}) {
   const records = getAppointmentsForStats(filters);
   const cancelledRecords = records.filter(r => r.status === appointmentStatus.CANCELLED);
+  const failedRecords = records.filter(r => r.status === appointmentStatus.FAILED);
 
   const reasonCount = {};
+
   for (const rec of cancelledRecords) {
     const code = rec.cancelReasonCode || 'other';
     if (!reasonCount[code]) {
       reasonCount[code] = {
         code,
         name: cancelReasons[code] || code,
+        category: 'cancelled',
         count: 0
       };
     }
     reasonCount[code].count++;
+  }
+
+  for (const rec of failedRecords) {
+    const codes = rec.failReasonCodes || ['other'];
+    for (const code of codes) {
+      if (!reasonCount[code]) {
+        reasonCount[code] = {
+          code,
+          name: failReasons[code] || code,
+          category: 'failed',
+          count: 0
+        };
+      }
+      reasonCount[code].count++;
+    }
   }
 
   const ranking = Object.values(reasonCount).sort((a, b) => b.count - a.count);
@@ -184,7 +204,8 @@ function getCannotReserveReasonRanking(filters = {}) {
   return {
     totalCancelled: cancelledRecords.length,
     totalExpired: expiredRecords.length,
-    totalFailed: cancelledRecords.length + expiredRecords.length,
+    totalFailed: failedRecords.length,
+    totalUnsuccessful: cancelledRecords.length + expiredRecords.length + failedRecords.length,
     ranking,
     filters
   };
@@ -328,11 +349,12 @@ function getAppointmentOverview(filters = {}) {
   const confirmed = records.filter(r => r.status === appointmentStatus.CONFIRMED).length;
   const cancelled = records.filter(r => r.status === appointmentStatus.CANCELLED).length;
   const expired = records.filter(r => r.status === appointmentStatus.EXPIRED).length;
+  const failed = records.filter(r => r.status === appointmentStatus.FAILED).length;
 
   const reviewCount = records.filter(r => r.isReviewRequired === true).length;
   const agentCount = records.filter(r => r.isAgent === true).length;
 
-  const validTotal = total - cancelled - expired;
+  const validTotal = total - cancelled - expired - failed;
   const successRate = validTotal > 0
     ? Number((((confirmed + pending) / validTotal) * 100).toFixed(2))
     : 0;
@@ -346,6 +368,7 @@ function getAppointmentOverview(filters = {}) {
     confirmedCount: confirmed,
     cancelledCount: cancelled,
     expiredCount: expired,
+    failedCount: failed,
     successRate,
     reviewCount,
     reviewRatio: total > 0 ? Number(((reviewCount / total) * 100).toFixed(2)) : 0,
@@ -358,7 +381,8 @@ function getAppointmentOverview(filters = {}) {
       { status: appointmentStatus.PENDING, name: appointmentStatusNames[appointmentStatus.PENDING], count: pending },
       { status: appointmentStatus.CONFIRMED, name: appointmentStatusNames[appointmentStatus.CONFIRMED], count: confirmed },
       { status: appointmentStatus.CANCELLED, name: appointmentStatusNames[appointmentStatus.CANCELLED], count: cancelled },
-      { status: appointmentStatus.EXPIRED, name: appointmentStatusNames[appointmentStatus.EXPIRED], count: expired }
+      { status: appointmentStatus.EXPIRED, name: appointmentStatusNames[appointmentStatus.EXPIRED], count: expired },
+      { status: appointmentStatus.FAILED, name: appointmentStatusNames[appointmentStatus.FAILED], count: failed }
     ],
     filters
   };

@@ -310,10 +310,16 @@ function validateAppointmentSubmission(body) {
   if (!communityCheck.valid) errors.push(communityCheck.error);
   else normalized.communityId = body.communityId || 'all';
 
-  const dateCheck = isValidDate(body.expectedDate);
-  if (!dateCheck.valid) errors.push(dateCheck.error);
-  else if (dateCheck.value) normalized.expectedDate = dateCheck.value;
-  else normalized.expectedDate = new Date().toISOString().split('T')[0];
+  if (body.expectedDate !== undefined && body.expectedDate !== null && body.expectedDate !== '') {
+    const dateCheck = isValidDate(body.expectedDate);
+    if (!dateCheck.valid) {
+      errors.push(dateCheck.error);
+    } else if (dateCheck.value) {
+      normalized.expectedDate = dateCheck.value;
+    }
+  } else {
+    normalized.expectedDate = new Date().toISOString().split('T')[0];
+  }
 
   const slotCheck = isValidTimeSlotPreference(body.preferredTimeSlot);
   if (!slotCheck.valid) errors.push(slotCheck.error);

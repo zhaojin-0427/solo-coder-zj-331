@@ -31,6 +31,7 @@ const {
   windowTypes,
   timeSlots,
   timeSlotNames,
+  failReasons,
   getBusinessTime,
   getCommunityWindowConfig,
   getAllTimeSlots
@@ -98,6 +99,9 @@ router.post('/create', (req, res) => {
     return res.json(fail(400, result.reason || '预约创建失败', {
       cannotReserveReasons: result.cannotReserveReasons,
       supplementaryMaterials: result.supplementaryMaterials,
+      failReasonCodes: result.failReasonCodes,
+      failReasons: result.failReasons,
+      appointment: result.appointment,
       duplicateCheck: result.duplicateCheck,
       prediction: result.prediction
     }));
@@ -248,6 +252,11 @@ router.get('/config/statuses', (req, res) => {
 
 router.get('/config/cancel-reasons', (req, res) => {
   const list = Object.entries(cancelReasons).map(([code, name]) => ({ code, name }));
+  res.json(success({ list, total: list.length }));
+});
+
+router.get('/config/fail-reasons', (req, res) => {
+  const list = Object.entries(failReasons).map(([code, name]) => ({ code, name }));
   res.json(success({ list, total: list.length }));
 });
 

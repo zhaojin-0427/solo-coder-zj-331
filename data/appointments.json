@@ -1,8 +1,269 @@
 [
   {
-    "id": "APT1782031507229WQ7T01",
+    "id": "APT1782088690928JON7RN",
     "cardType": "bus_card",
     "cardName": "公交卡",
+    "businessType": "report_loss",
+    "businessName": "挂失",
+    "age": 70,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "agentRelationName": null,
+    "agentComplexity": null,
+    "communityId": "community_005",
+    "communityName": "胜利社区",
+    "expectedDate": "2026-06-25",
+    "expectedTimeSlot": "09:00-09:30",
+    "expectedTimePeriod": "morning",
+    "assignedWindowId": "C5_W1",
+    "assignedWindowType": "general",
+    "assignedWindowTypeName": "综合窗口",
+    "alternativeWindows": [],
+    "alternativeTimeSlots": [],
+    "businessMinutes": 8,
+    "estimatedWaitMinutes": 0,
+    "estimatedTotalMinutes": 8,
+    "isReviewRequired": false,
+    "materials": [
+      {
+        "key": "id_card",
+        "issueDate": "2026-01-01",
+        "expiryDate": null,
+        "idNumber": "REGRESSION-SLOT-001"
+      }
+    ],
+    "materialKeys": [
+      "id_card"
+    ],
+    "idCardKey": "REGRESSION-SLOT-001",
+    "applicantName": "时段回归老人",
+    "applicantContact": null,
+    "ruleVersion": {
+      "version": "v2.0",
+      "effectiveDate": "2025-01-01",
+      "applicableCommunities": [
+        "all"
+      ],
+      "communityName": "胜利社区"
+    },
+    "status": "pending",
+    "statusName": "待确认",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "time": "2026-06-22T00:38:10.928Z",
+        "operatorId": "system",
+        "operatorName": "系统",
+        "remark": "创建预约"
+      }
+    ],
+    "cancelReason": null,
+    "cancelReasonCode": null,
+    "cancelRemark": null,
+    "cancelledBy": null,
+    "cancelledAt": null,
+    "confirmedAt": null,
+    "confirmedBy": null,
+    "operatorId": "system",
+    "operatorName": "系统",
+    "remarks": null,
+    "predictionSnapshot": {
+      "recommendedWindow": {
+        "windowId": "C5_W1",
+        "type": "general",
+        "typeName": "综合窗口",
+        "typeDescription": "可办理各类常规业务",
+        "capacity": 2,
+        "priorityScore": 20,
+        "communityId": "community_005",
+        "communityName": "胜利社区",
+        "currentLoadMinutes": 0,
+        "loadRatio": 0,
+        "finalScore": 20,
+        "estimatedQueueCount": 0
+      },
+      "recommendedTimeSlot": {
+        "slot": "09:00-09:30",
+        "period": "morning",
+        "periodName": "上午",
+        "startTime": "09:00",
+        "endTime": "09:30",
+        "available": true,
+        "loadRatio": 0,
+        "totalLoadMinutes": 0,
+        "estimatedWaitMinutes": 0,
+        "score": 120
+      },
+      "diversionSuggestions": [],
+      "specialReminders": [
+        "挂失后24小时内生效",
+        "可电话挂失后再到窗口办理正式手续",
+        "挂失后找到原卡可办理解挂"
+      ]
+    },
+    "createdAt": "2026-06-22T00:38:10.928Z",
+    "updatedAt": "2026-06-22T00:38:10.928Z"
+  },
+  {
+    "id": "APT1782088690916YS4B8T",
+    "cardType": "bus_card",
+    "cardName": "公交卡",
+    "businessType": "report_loss",
+    "businessName": "挂失",
+    "age": 70,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "agentRelationName": null,
+    "agentComplexity": null,
+    "communityId": "community_005",
+    "communityName": "胜利社区",
+    "expectedDate": "2026-07-01",
+    "expectedTimeSlot": "10:00-10:30",
+    "expectedTimePeriod": "morning",
+    "assignedWindowId": "C5_W1",
+    "assignedWindowType": "general",
+    "assignedWindowTypeName": "综合窗口",
+    "alternativeWindows": [],
+    "alternativeTimeSlots": [
+      {
+        "slot": "09:00-09:30",
+        "period": "morning",
+        "periodName": "上午",
+        "startTime": "09:00",
+        "endTime": "09:30",
+        "available": true,
+        "loadRatio": 0,
+        "totalLoadMinutes": 0,
+        "estimatedWaitMinutes": 0,
+        "score": 120
+      },
+      {
+        "slot": "09:30-10:00",
+        "period": "morning",
+        "periodName": "上午",
+        "startTime": "09:30",
+        "endTime": "10:00",
+        "available": true,
+        "loadRatio": 0,
+        "totalLoadMinutes": 0,
+        "estimatedWaitMinutes": 0,
+        "score": 120
+      },
+      {
+        "slot": "10:30-11:00",
+        "period": "morning",
+        "periodName": "上午",
+        "startTime": "10:30",
+        "endTime": "11:00",
+        "available": true,
+        "loadRatio": 0,
+        "totalLoadMinutes": 0,
+        "estimatedWaitMinutes": 0,
+        "score": 120
+      },
+      {
+        "slot": "11:00-11:30",
+        "period": "morning",
+        "periodName": "上午",
+        "startTime": "11:00",
+        "endTime": "11:30",
+        "available": true,
+        "loadRatio": 0,
+        "totalLoadMinutes": 0,
+        "estimatedWaitMinutes": 0,
+        "score": 120
+      }
+    ],
+    "businessMinutes": 8,
+    "estimatedWaitMinutes": 0,
+    "estimatedTotalMinutes": 8,
+    "isReviewRequired": false,
+    "materials": [
+      {
+        "key": "id_card",
+        "issueDate": "2026-01-01",
+        "expiryDate": null,
+        "idNumber": "REGRESSION-DATE-001"
+      }
+    ],
+    "materialKeys": [
+      "id_card"
+    ],
+    "idCardKey": "REGRESSION-DATE-001",
+    "applicantName": "日期回归老人",
+    "applicantContact": null,
+    "ruleVersion": {
+      "version": "v2.0",
+      "effectiveDate": "2025-01-01",
+      "applicableCommunities": [
+        "all"
+      ],
+      "communityName": "胜利社区"
+    },
+    "status": "pending",
+    "statusName": "待确认",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "time": "2026-06-22T00:38:10.916Z",
+        "operatorId": "system",
+        "operatorName": "系统",
+        "remark": "创建预约"
+      }
+    ],
+    "cancelReason": null,
+    "cancelReasonCode": null,
+    "cancelRemark": null,
+    "cancelledBy": null,
+    "cancelledAt": null,
+    "confirmedAt": null,
+    "confirmedBy": null,
+    "operatorId": "system",
+    "operatorName": "系统",
+    "remarks": null,
+    "predictionSnapshot": {
+      "recommendedWindow": {
+        "windowId": "C5_W1",
+        "type": "general",
+        "typeName": "综合窗口",
+        "typeDescription": "可办理各类常规业务",
+        "capacity": 2,
+        "priorityScore": 20,
+        "communityId": "community_005",
+        "communityName": "胜利社区",
+        "currentLoadMinutes": 0,
+        "loadRatio": 0,
+        "finalScore": 20,
+        "estimatedQueueCount": 0
+      },
+      "recommendedTimeSlot": {
+        "slot": "10:00-10:30",
+        "period": "morning",
+        "periodName": "上午",
+        "startTime": "10:00",
+        "endTime": "10:30",
+        "available": true,
+        "loadRatio": 0,
+        "totalLoadMinutes": 0,
+        "estimatedWaitMinutes": 0,
+        "score": 130
+      },
+      "diversionSuggestions": [],
+      "specialReminders": [
+        "挂失后24小时内生效",
+        "可电话挂失后再到窗口办理正式手续",
+        "挂失后找到原卡可办理解挂"
+      ]
+    },
+    "createdAt": "2026-06-22T00:38:10.916Z",
+    "updatedAt": "2026-06-22T00:38:10.916Z"
+  },
+  {
+    "id": "APT1782088690908WLEZOG",
+    "cardType": "senior_card",
+    "cardName": "老年卡",
     "businessType": "apply",
     "businessName": "办理",
     "age": 70,
@@ -11,11 +272,567 @@
     "agentRelation": null,
     "agentRelationName": null,
     "agentComplexity": null,
+    "communityId": "community_005",
+    "communityName": "胜利社区",
+    "expectedDate": "2026-06-25",
+    "expectedTimeSlot": null,
+    "expectedTimePeriod": null,
+    "assignedWindowId": null,
+    "assignedWindowType": null,
+    "assignedWindowTypeName": null,
+    "alternativeWindows": [],
+    "alternativeTimeSlots": [],
+    "businessMinutes": 18,
+    "estimatedWaitMinutes": 0,
+    "estimatedTotalMinutes": 18,
+    "isReviewRequired": false,
+    "materials": [
+      {
+        "key": "id_card",
+        "issueDate": "2026-01-01",
+        "expiryDate": null
+      },
+      {
+        "key": "photo",
+        "issueDate": null,
+        "expiryDate": null
+      }
+    ],
+    "materialKeys": [
+      "id_card",
+      "photo"
+    ],
+    "idCardKey": null,
+    "applicantName": null,
+    "applicantContact": null,
+    "ruleVersion": {
+      "version": "v2.0",
+      "effectiveDate": "2025-01-01",
+      "applicableCommunities": [
+        "all"
+      ],
+      "communityName": "胜利社区"
+    },
+    "status": "failed",
+    "statusName": "预约失败",
+    "statusHistory": [
+      {
+        "status": "failed",
+        "time": "2026-06-22T00:38:10.909Z",
+        "operatorId": "system",
+        "operatorName": "系统",
+        "remark": "预约失败：缺少必要材料：户口本/居住证明"
+      }
+    ],
+    "failReasonCodes": [
+      "rule_not_passed",
+      "material_missing"
+    ],
+    "failReasons": [
+      "规则校验不通过",
+      "材料不全"
+    ],
+    "cannotReserveReasons": [
+      "缺少必要材料：户口本/居住证明"
+    ],
+    "supplementaryMaterials": [
+      {
+        "key": "household_register",
+        "name": "户口本/居住证明",
+        "hint": "请补充：户口本/居住证明"
+      }
+    ],
+    "isDuplicate": false,
+    "duplicateCheck": null,
+    "cancelReason": null,
+    "cancelReasonCode": null,
+    "cancelRemark": null,
+    "cancelledBy": null,
+    "cancelledAt": null,
+    "confirmedAt": null,
+    "confirmedBy": null,
+    "operatorId": "system",
+    "operatorName": "系统",
+    "remarks": null,
+    "predictionSnapshot": {
+      "recommendedWindow": null,
+      "recommendedTimeSlot": null,
+      "diversionSuggestions": [],
+      "specialReminders": [
+        "需本人近期一寸免冠彩色照片1张",
+        "需提供本市户籍证明",
+        "年满60周岁即可办理，按周岁计算"
+      ],
+      "ruleCheckResult": {
+        "canProceed": false,
+        "canProceedSuccessfully": false,
+        "errors": [
+          "缺少必要材料：户口本/居住证明"
+        ],
+        "missingMaterials": [
+          {
+            "key": "household_register",
+            "name": "户口本/居住证明"
+          }
+        ],
+        "expiredMaterials": [],
+        "seniorReview": null,
+        "specialReminders": [
+          "需本人近期一寸免冠彩色照片1张",
+          "需提供本市户籍证明",
+          "年满60周岁即可办理，按周岁计算"
+        ],
+        "ruleVersion": {
+          "version": "v2.0",
+          "effectiveDate": "2025-01-01",
+          "applicableCommunities": [
+            "all"
+          ],
+          "communityName": "胜利社区"
+        }
+      }
+    },
+    "createdAt": "2026-06-22T00:38:10.909Z",
+    "updatedAt": "2026-06-22T00:38:10.909Z"
+  },
+  {
+    "id": "APT1782055499267AERL1B",
+    "cardType": "senior_card",
+    "cardName": "老年卡",
+    "businessType": "apply",
+    "businessName": "办理",
+    "age": 72,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "agentRelationName": null,
+    "agentComplexity": null,
     "communityId": "community_001",
     "communityName": "朝阳社区",
-    "expectedDate": "2026-06-25",
+    "expectedDate": "2026-07-01",
     "expectedTimeSlot": "10:00-10:30",
-    "expectedTimePeriod": "morning",
+    "expectedTimePeriod": null,
+    "assignedWindowId": null,
+    "assignedWindowType": null,
+    "assignedWindowTypeName": null,
+    "alternativeWindows": [],
+    "alternativeTimeSlots": [],
+    "businessMinutes": 18,
+    "estimatedWaitMinutes": 0,
+    "estimatedTotalMinutes": 18,
+    "isReviewRequired": false,
+    "materials": [
+      {
+        "key": "id_card",
+        "issueDate": "2010-01-01",
+        "expiryDate": null,
+        "idNumber": "110101195501015555"
+      },
+      {
+        "key": "household_register",
+        "issueDate": "2020-01-01",
+        "expiryDate": null
+      },
+      {
+        "key": "photo",
+        "issueDate": "2026-01-01",
+        "expiryDate": null
+      }
+    ],
+    "materialKeys": [
+      "id_card",
+      "household_register",
+      "photo"
+    ],
+    "idCardKey": "110101195501015555",
+    "applicantName": null,
+    "applicantContact": null,
+    "ruleVersion": {
+      "version": "v2.0",
+      "effectiveDate": "2025-01-01",
+      "applicableCommunities": [
+        "all"
+      ],
+      "communityName": "朝阳社区"
+    },
+    "status": "failed",
+    "statusName": "预约失败",
+    "statusHistory": [
+      {
+        "status": "failed",
+        "time": "2026-06-21T15:24:59.267Z",
+        "operatorId": "system",
+        "operatorName": "系统",
+        "remark": "预约失败：身份证已过期，请重新办理"
+      }
+    ],
+    "failReasonCodes": [
+      "rule_not_passed",
+      "material_expired"
+    ],
+    "failReasons": [
+      "规则校验不通过",
+      "材料过期"
+    ],
+    "cannotReserveReasons": [
+      "身份证已过期，请重新办理"
+    ],
+    "supplementaryMaterials": [
+      {
+        "key": "id_card",
+        "name": "身份证",
+        "issueDate": "2010-01-01",
+        "expiryDate": null,
+        "validityDays": 1825,
+        "daysSinceIssued": 6025,
+        "isExpired": true,
+        "hint": "请更新：身份证（已过期）"
+      }
+    ],
+    "isDuplicate": false,
+    "duplicateCheck": null,
+    "cancelReason": null,
+    "cancelReasonCode": null,
+    "cancelRemark": null,
+    "cancelledBy": null,
+    "cancelledAt": null,
+    "confirmedAt": null,
+    "confirmedBy": null,
+    "operatorId": "system",
+    "operatorName": "系统",
+    "remarks": null,
+    "predictionSnapshot": {
+      "recommendedWindow": null,
+      "recommendedTimeSlot": null,
+      "diversionSuggestions": [],
+      "specialReminders": [
+        "需本人近期一寸免冠彩色照片1张",
+        "需提供本市户籍证明",
+        "年满60周岁即可办理，按周岁计算"
+      ],
+      "ruleCheckResult": {
+        "canProceed": false,
+        "canProceedSuccessfully": false,
+        "errors": [
+          "身份证已过期，请重新办理"
+        ],
+        "missingMaterials": [],
+        "expiredMaterials": [
+          {
+            "key": "id_card",
+            "name": "身份证",
+            "issueDate": "2010-01-01",
+            "expiryDate": null,
+            "validityDays": 1825,
+            "daysSinceIssued": 6025
+          }
+        ],
+        "seniorReview": null,
+        "specialReminders": [
+          "需本人近期一寸免冠彩色照片1张",
+          "需提供本市户籍证明",
+          "年满60周岁即可办理，按周岁计算"
+        ],
+        "ruleVersion": {
+          "version": "v2.0",
+          "effectiveDate": "2025-01-01",
+          "applicableCommunities": [
+            "all"
+          ],
+          "communityName": "朝阳社区"
+        }
+      }
+    },
+    "createdAt": "2026-06-21T15:24:59.267Z",
+    "updatedAt": "2026-06-21T15:24:59.267Z"
+  },
+  {
+    "id": "APT1782055499233CJJ7UU",
+    "cardType": "senior_card",
+    "cardName": "老年卡",
+    "businessType": "apply",
+    "businessName": "办理",
+    "age": 72,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "agentRelationName": null,
+    "agentComplexity": null,
+    "communityId": "community_001",
+    "communityName": "朝阳社区",
+    "expectedDate": "2026-07-01",
+    "expectedTimeSlot": "09:00-09:30",
+    "expectedTimePeriod": null,
+    "assignedWindowId": null,
+    "assignedWindowType": null,
+    "assignedWindowTypeName": null,
+    "alternativeWindows": [],
+    "alternativeTimeSlots": [],
+    "businessMinutes": 18,
+    "estimatedWaitMinutes": 0,
+    "estimatedTotalMinutes": 18,
+    "isReviewRequired": false,
+    "materials": [
+      {
+        "key": "id_card",
+        "issueDate": "2023-01-01",
+        "expiryDate": null,
+        "idNumber": "110101195501016666"
+      }
+    ],
+    "materialKeys": [
+      "id_card"
+    ],
+    "idCardKey": "110101195501016666",
+    "applicantName": null,
+    "applicantContact": null,
+    "ruleVersion": {
+      "version": "v2.0",
+      "effectiveDate": "2025-01-01",
+      "applicableCommunities": [
+        "all"
+      ],
+      "communityName": "朝阳社区"
+    },
+    "status": "failed",
+    "statusName": "预约失败",
+    "statusHistory": [
+      {
+        "status": "failed",
+        "time": "2026-06-21T15:24:59.234Z",
+        "operatorId": "system",
+        "operatorName": "系统",
+        "remark": "预约失败：缺少必要材料：一寸免冠照片、户口本/居住证明"
+      }
+    ],
+    "failReasonCodes": [
+      "rule_not_passed",
+      "material_missing"
+    ],
+    "failReasons": [
+      "规则校验不通过",
+      "材料不全"
+    ],
+    "cannotReserveReasons": [
+      "缺少必要材料：一寸免冠照片、户口本/居住证明"
+    ],
+    "supplementaryMaterials": [
+      {
+        "key": "photo",
+        "name": "一寸免冠照片",
+        "hint": "请补充：一寸免冠照片"
+      },
+      {
+        "key": "household_register",
+        "name": "户口本/居住证明",
+        "hint": "请补充：户口本/居住证明"
+      }
+    ],
+    "isDuplicate": false,
+    "duplicateCheck": null,
+    "cancelReason": null,
+    "cancelReasonCode": null,
+    "cancelRemark": null,
+    "cancelledBy": null,
+    "cancelledAt": null,
+    "confirmedAt": null,
+    "confirmedBy": null,
+    "operatorId": "system",
+    "operatorName": "系统",
+    "remarks": null,
+    "predictionSnapshot": {
+      "recommendedWindow": null,
+      "recommendedTimeSlot": null,
+      "diversionSuggestions": [],
+      "specialReminders": [
+        "需本人近期一寸免冠彩色照片1张",
+        "需提供本市户籍证明",
+        "年满60周岁即可办理，按周岁计算"
+      ],
+      "ruleCheckResult": {
+        "canProceed": false,
+        "canProceedSuccessfully": false,
+        "errors": [
+          "缺少必要材料：一寸免冠照片、户口本/居住证明"
+        ],
+        "missingMaterials": [
+          {
+            "key": "photo",
+            "name": "一寸免冠照片"
+          },
+          {
+            "key": "household_register",
+            "name": "户口本/居住证明"
+          }
+        ],
+        "expiredMaterials": [],
+        "seniorReview": null,
+        "specialReminders": [
+          "需本人近期一寸免冠彩色照片1张",
+          "需提供本市户籍证明",
+          "年满60周岁即可办理，按周岁计算"
+        ],
+        "ruleVersion": {
+          "version": "v2.0",
+          "effectiveDate": "2025-01-01",
+          "applicableCommunities": [
+            "all"
+          ],
+          "communityName": "朝阳社区"
+        }
+      }
+    },
+    "createdAt": "2026-06-21T15:24:59.234Z",
+    "updatedAt": "2026-06-21T15:24:59.234Z"
+  },
+  {
+    "id": "APT17820554992207GGRD2",
+    "cardType": "senior_card",
+    "cardName": "老年卡",
+    "businessType": "apply",
+    "businessName": "办理",
+    "age": 72,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "agentRelationName": null,
+    "agentComplexity": null,
+    "communityId": "community_001",
+    "communityName": "朝阳社区",
+    "expectedDate": "2020-01-01",
+    "expectedTimeSlot": null,
+    "expectedTimePeriod": null,
+    "assignedWindowId": null,
+    "assignedWindowType": null,
+    "assignedWindowTypeName": null,
+    "alternativeWindows": [],
+    "alternativeTimeSlots": [],
+    "businessMinutes": 18,
+    "estimatedWaitMinutes": 0,
+    "estimatedTotalMinutes": 18,
+    "isReviewRequired": false,
+    "materials": [
+      {
+        "key": "id_card",
+        "issueDate": "2023-01-01",
+        "expiryDate": null,
+        "idNumber": "110101195501018888"
+      },
+      {
+        "key": "household_register",
+        "issueDate": "2020-01-01",
+        "expiryDate": null
+      },
+      {
+        "key": "photo",
+        "issueDate": "2026-01-01",
+        "expiryDate": null
+      }
+    ],
+    "materialKeys": [
+      "id_card",
+      "household_register",
+      "photo"
+    ],
+    "idCardKey": "110101195501018888",
+    "applicantName": null,
+    "applicantContact": null,
+    "ruleVersion": {
+      "version": "v1.0",
+      "effectiveDate": "2020-01-01",
+      "applicableCommunities": [
+        "community_001",
+        "community_002",
+        "community_003"
+      ],
+      "communityName": "朝阳社区"
+    },
+    "status": "failed",
+    "statusName": "预约失败",
+    "statusHistory": [
+      {
+        "status": "failed",
+        "time": "2026-06-21T15:24:59.220Z",
+        "operatorId": "system",
+        "operatorName": "系统",
+        "remark": "预约失败：预约日期不能早于今日"
+      }
+    ],
+    "failReasonCodes": [
+      "date_invalid"
+    ],
+    "failReasons": [
+      "预约日期无效"
+    ],
+    "cannotReserveReasons": [
+      "预约日期不能早于今日"
+    ],
+    "supplementaryMaterials": [],
+    "isDuplicate": false,
+    "duplicateCheck": null,
+    "cancelReason": null,
+    "cancelReasonCode": null,
+    "cancelRemark": null,
+    "cancelledBy": null,
+    "cancelledAt": null,
+    "confirmedAt": null,
+    "confirmedBy": null,
+    "operatorId": "system",
+    "operatorName": "系统",
+    "remarks": null,
+    "predictionSnapshot": {
+      "recommendedWindow": null,
+      "recommendedTimeSlot": null,
+      "diversionSuggestions": [],
+      "specialReminders": [
+        "需本人近期一寸免冠彩色照片1张",
+        "需提供本市户籍证明",
+        "年满60周岁即可办理，按周岁计算"
+      ],
+      "ruleCheckResult": {
+        "canProceed": true,
+        "canProceedSuccessfully": true,
+        "errors": [],
+        "missingMaterials": [],
+        "expiredMaterials": [],
+        "seniorReview": null,
+        "specialReminders": [
+          "需本人近期一寸免冠彩色照片1张",
+          "需提供本市户籍证明",
+          "年满60周岁即可办理，按周岁计算"
+        ],
+        "ruleVersion": {
+          "version": "v1.0",
+          "effectiveDate": "2020-01-01",
+          "applicableCommunities": [
+            "community_001",
+            "community_002",
+            "community_003"
+          ],
+          "communityName": "朝阳社区"
+        }
+      }
+    },
+    "createdAt": "2026-06-21T15:24:59.221Z",
+    "updatedAt": "2026-06-21T15:24:59.221Z"
+  },
+  {
+    "id": "APT17820554991799HSQUC",
+    "cardType": "senior_card",
+    "cardName": "老年卡",
+    "businessType": "apply",
+    "businessName": "办理",
+    "age": 72,
+    "isPresent": true,
+    "isAgent": false,
+    "agentRelation": null,
+    "agentRelationName": null,
+    "agentComplexity": null,
+    "communityId": "community_001",
+    "communityName": "朝阳社区",
+    "expectedDate": "2026-07-01",
+    "expectedTimeSlot": "14:00-14:30",
+    "expectedTimePeriod": "afternoon",
     "assignedWindowId": "C1_W1",
     "assignedWindowType": "general",
     "assignedWindowTypeName": "综合窗口",
@@ -49,85 +866,36 @@
         "estimatedQueueCount": 0
       }
     ],
-    "alternativeTimeSlots": [
-      {
-        "slot": "14:30-15:00",
-        "period": "afternoon",
-        "periodName": "下午",
-        "startTime": "14:30",
-        "endTime": "15:00",
-        "available": true,
-        "loadRatio": 0,
-        "totalLoadMinutes": 0,
-        "estimatedWaitMinutes": 0,
-        "score": 110
-      },
-      {
-        "slot": "09:00-09:30",
-        "period": "morning",
-        "periodName": "上午",
-        "startTime": "09:00",
-        "endTime": "09:30",
-        "available": true,
-        "loadRatio": 0,
-        "totalLoadMinutes": 0,
-        "estimatedWaitMinutes": 0,
-        "score": 100
-      },
-      {
-        "slot": "09:30-10:00",
-        "period": "morning",
-        "periodName": "上午",
-        "startTime": "09:30",
-        "endTime": "10:00",
-        "available": true,
-        "loadRatio": 0,
-        "totalLoadMinutes": 0,
-        "estimatedWaitMinutes": 0,
-        "score": 100
-      },
-      {
-        "slot": "10:30-11:00",
-        "period": "morning",
-        "periodName": "上午",
-        "startTime": "10:30",
-        "endTime": "11:00",
-        "available": true,
-        "loadRatio": 0,
-        "totalLoadMinutes": 0,
-        "estimatedWaitMinutes": 0,
-        "score": 100
-      }
-    ],
-    "businessMinutes": 15,
+    "alternativeTimeSlots": [],
+    "businessMinutes": 18,
     "estimatedWaitMinutes": 0,
-    "estimatedTotalMinutes": 15,
+    "estimatedTotalMinutes": 18,
     "isReviewRequired": false,
     "materials": [
       {
         "key": "id_card",
-        "issueDate": "2024-01-01",
+        "issueDate": "2023-01-01",
         "expiryDate": null,
-        "idNumber": "110101195501018888"
-      },
-      {
-        "key": "photo",
-        "issueDate": null,
-        "expiryDate": null
+        "idNumber": "110101195501017777"
       },
       {
         "key": "household_register",
-        "issueDate": "2023-06-01",
+        "issueDate": "2020-01-01",
+        "expiryDate": null
+      },
+      {
+        "key": "photo",
+        "issueDate": "2026-01-01",
         "expiryDate": null
       }
     ],
     "materialKeys": [
       "id_card",
-      "photo",
-      "household_register"
+      "household_register",
+      "photo"
     ],
-    "idCardKey": "110101195501018888",
-    "applicantName": "重复测试老人",
+    "idCardKey": "110101195501017777",
+    "applicantName": null,
     "applicantContact": null,
     "ruleVersion": {
       "version": "v2.0",
@@ -142,7 +910,7 @@
     "statusHistory": [
       {
         "status": "pending",
-        "time": "2026-06-21T08:45:07.229Z",
+        "time": "2026-06-21T15:24:59.179Z",
         "operatorId": "system",
         "operatorName": "系统",
         "remark": "创建预约"
@@ -174,27 +942,27 @@
         "estimatedQueueCount": 0
       },
       "recommendedTimeSlot": {
-        "slot": "10:00-10:30",
-        "period": "morning",
-        "periodName": "上午",
-        "startTime": "10:00",
-        "endTime": "10:30",
+        "slot": "14:00-14:30",
+        "period": "afternoon",
+        "periodName": "下午",
+        "startTime": "14:00",
+        "endTime": "14:30",
         "available": true,
         "loadRatio": 0,
         "totalLoadMinutes": 0,
         "estimatedWaitMinutes": 0,
-        "score": 110
+        "score": 120
       },
       "diversionSuggestions": [
         "该业务可在3种类型窗口办理，推荐优先选择综合窗口"
       ],
       "specialReminders": [
         "需本人近期一寸免冠彩色照片1张",
-        "需提供本市户籍证明或居住证明",
-        "首次办理免费，补办需缴纳工本费20元"
+        "需提供本市户籍证明",
+        "年满60周岁即可办理，按周岁计算"
       ]
     },
-    "createdAt": "2026-06-21T08:45:07.229Z",
-    "updatedAt": "2026-06-21T08:45:07.229Z"
+    "createdAt": "2026-06-21T15:24:59.179Z",
+    "updatedAt": "2026-06-21T15:24:59.179Z"
   }
 ]

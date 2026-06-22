@@ -148,14 +148,29 @@ const appointmentStatus = {
   PENDING: 'pending',
   CONFIRMED: 'confirmed',
   CANCELLED: 'cancelled',
-  EXPIRED: 'expired'
+  EXPIRED: 'expired',
+  FAILED: 'failed'
 };
 
 const appointmentStatusNames = {
   pending: '待确认',
   confirmed: '已确认',
   cancelled: '已取消',
-  expired: '已过期'
+  expired: '已过期',
+  failed: '预约失败'
+};
+
+const failReasons = {
+  rule_not_passed: '规则校验不通过',
+  material_missing: '材料不全',
+  material_expired: '材料过期',
+  agent_invalid: '代办不符合要求',
+  age_not_met: '年龄不符合要求',
+  presence_required: '需本人到场',
+  no_available_window: '无可用窗口',
+  date_invalid: '预约日期无效',
+  duplicate: '重复预约',
+  other: '其他原因'
 };
 
 const cancelReasons = {
@@ -280,6 +295,7 @@ module.exports = {
   timeSlotNames,
   appointmentStatus,
   appointmentStatusNames,
+  failReasons,
   cancelReasons,
   agentComplexityLevels,
   getBusinessTime,

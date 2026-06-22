@@ -6,6 +6,7 @@ const { canArchiveSuccessful } = require('../utils/validator');
 const {
   appointmentStatus,
   appointmentStatusNames,
+  failReasons,
   cancelReasons,
   getBusinessTime,
   getSuitableWindows,
@@ -375,10 +376,17 @@ function predictAppointment(params) {
   result.recommendedWindow = scoredWindows[0] || null;
   result.alternativeWindows = scoredWindows.slice(1, 4);
 
+  const allSlots = getAllTimeSlots();
+  const isExactSlot = typeof preferredTimeSlot === 'string'
+    && preferredTimeSlot.includes('-')
+    && preferredTimeSlot !== 'morning'
+    && preferredTimeSlot !== 'afternoon'
+    && preferredTimeSlot !== 'any';
+
   let preferredPeriod = 'any';
   if (preferredTimeSlot === 'morning') preferredPeriod = 'morning';
   else if (preferredTimeSlot === 'afternoon') preferredPeriod = 'afternoon';
-  else if (typeof preferredTimeSlot === 'string' && preferredTimeSlot.includes('-')) {
+  else if (isExactSlot) {
     const hour = parseInt(preferredTimeSlot.split('-')[0]);
     preferredPeriod = hour < 12 ? 'morning' : 'afternoon';
   }
@@ -390,10 +398,36 @@ function predictAppointment(params) {
     result.businessMinutes
   );
 
-  result.recommendedTimeSlot = slotRecommendation.recommendedSlot;
-  result.alternativeTimeSlots = slotRecommendation.allSlots
-    .filter(s => s.available && s !== slotRecommendation.recommendedSlot)
-    .slice(0, 4);
+  if (isExactSlot) {
+    const exactSlot = slotRecommendation.allSlots.find(s => s.slot === preferredTimeSlot);
+    if (exactSlot) {
+      if (exactSlot.available) {
+        result.recommendedTimeSlot = exactSlot;
+        result.isExactSlotSelected = true;
+      } else {
+        result.cannotReserveReasons.push(`所选时段 ${preferredTimeSlot} 已满，不可预约`);
+        result.diversionSuggestions.push(`所选时段 ${preferredTimeSlot} 负载已满，请选择以下推荐时段`);
+        result.recommendedTimeSlot = slotRecommendation.recommendedSlot;
+        result.alternativeTimeSlots = slotRecommendation.allSlots
+          .filter(s => s.available && s !== slotRecommendation.recommendedSlot)
+          .slice(0, 4);
+        result.canReserve = false;
+        result.exactSlotUnavailable = true;
+      }
+    } else {
+      result.cannotReserveReasons.push(`无效的预约时段：${preferredTimeSlot}`);
+      result.recommendedTimeSlot = slotRecommendation.recommendedSlot;
+      result.alternativeTimeSlots = slotRecommendation.allSlots
+        .filter(s => s.available && s !== slotRecommendation.recommendedSlot)
+        .slice(0, 4);
+      result.canReserve = false;
+    }
+  } else {
+    result.recommendedTimeSlot = slotRecommendation.recommendedSlot;
+    result.alternativeTimeSlots = slotRecommendation.allSlots
+      .filter(s => s.available && s !== slotRecommendation.recommendedSlot)
+      .slice(0, 4);
+  }
 
   if (result.recommendedTimeSlot) {
     result.estimatedWaitMinutes = result.recommendedTimeSlot.estimatedWaitMinutes;
@@ -417,6 +451,146 @@ function predictAppointment(params) {
 
   result.canReserve = true;
   return result;
+}
+
+function determineFailReason(prediction, params) {
+  const failReasonList = [];
+  const ruleCheck = prediction.ruleCheckResult;
+
+  if (ruleCheck && !ruleCheck.canProceed) {
+    if (ruleCheck.errors && ruleCheck.errors.length > 0) {
+      failReasonList.push('rule_not_passed');
+    }
+    if (ruleCheck.missingMaterials && ruleCheck.missingMaterials.length > 0) {
+      failReasonList.push('material_missing');
+    }
+    if (ruleCheck.expiredMaterials && ruleCheck.expiredMaterials.length > 0) {
+      failReasonList.push('material_expired');
+    }
+    if (ruleCheck.ageNotMet) {
+      failReasonList.push('age_not_met');
+    }
+    if (ruleCheck.presenceRequired) {
+      failReasonList.push('presence_required');
+    }
+    if (ruleCheck.agentInvalid) {
+      failReasonList.push('agent_invalid');
+    }
+  }
+
+  if (prediction.cannotReserveReasons) {
+    for (const reason of prediction.cannotReserveReasons) {
+      if (reason.includes('无') && reason.includes('窗口')) failReasonList.push('no_available_window');
+      if (reason.includes('日期')) failReasonList.push('date_invalid');
+    }
+  }
+
+  if (failReasonList.length === 0) {
+    failReasonList.push('other');
+  }
+
+  return failReasonList;
+}
+
+function createFailedAppointment(params, prediction, failReasonsList, duplicateCheck = null) {
+  const {
+    cardType,
+    businessType,
+    age,
+    isPresent,
+    agentRelation,
+    materials,
+    materialKeys,
+    communityId,
+    expectedDate,
+    preferredTimeSlot = 'any',
+    operatorId = 'system',
+    operatorName = '系统',
+    applicantName = null,
+    applicantContact = null,
+    remarks = null
+  } = params;
+
+  const materialsList = materials || [];
+  const keysList = materialKeys || materialsList.map(m => m.key);
+  const idCardKey = extractIdCardKey(materialsList);
+
+  const records = loadAppointments();
+  const primaryReason = failReasonsList[0] || 'other';
+
+  const appointment = {
+    id: generateId(),
+    cardType,
+    cardName: cardTypes[cardType]?.name || cardType,
+    businessType,
+    businessName: businessTypeNames[businessType] || businessType,
+    age,
+    isPresent: !!isPresent,
+    isAgent: !isPresent,
+    agentRelation: agentRelation || null,
+    agentRelationName: agentRelation ? (require('../config/rules').agentRelationNames[agentRelation] || agentRelation) : null,
+    agentComplexity: prediction.agentComplexity,
+    communityId,
+    communityName: communityNames[communityId] || communityId,
+    expectedDate,
+    expectedTimeSlot: prediction.recommendedTimeSlot?.slot || (typeof preferredTimeSlot === 'string' && preferredTimeSlot.includes('-') ? preferredTimeSlot : null),
+    expectedTimePeriod: prediction.recommendedTimeSlot?.period || null,
+    assignedWindowId: prediction.recommendedWindow?.windowId || null,
+    assignedWindowType: prediction.recommendedWindow?.type || null,
+    assignedWindowTypeName: prediction.recommendedWindow?.typeName || null,
+    alternativeWindows: prediction.alternativeWindows,
+    alternativeTimeSlots: prediction.alternativeTimeSlots,
+    businessMinutes: prediction.businessMinutes,
+    estimatedWaitMinutes: prediction.estimatedWaitMinutes,
+    estimatedTotalMinutes: (prediction.businessMinutes || 0) + (prediction.estimatedWaitMinutes || 0),
+    isReviewRequired: prediction.isReviewRequired,
+    materials: materialsList,
+    materialKeys: keysList,
+    idCardKey,
+    applicantName,
+    applicantContact,
+    ruleVersion: prediction.ruleCheckResult?.ruleVersion,
+    status: appointmentStatus.FAILED,
+    statusName: appointmentStatusNames[appointmentStatus.FAILED],
+    statusHistory: [
+      {
+        status: appointmentStatus.FAILED,
+        time: new Date().toISOString(),
+        operatorId,
+        operatorName,
+        remark: duplicateCheck ? '重复预约被拦截' : '预约失败：' + (prediction.cannotReserveReasons?.[0] || '不符合预约条件')
+      }
+    ],
+    failReasonCodes: failReasonsList,
+    failReasons: failReasonsList.map(r => failReasons[r] || r),
+    cannotReserveReasons: prediction.cannotReserveReasons,
+    supplementaryMaterials: prediction.supplementaryMaterials,
+    isDuplicate: !!duplicateCheck,
+    duplicateCheck,
+    cancelReason: null,
+    cancelReasonCode: null,
+    cancelRemark: null,
+    cancelledBy: null,
+    cancelledAt: null,
+    confirmedAt: null,
+    confirmedBy: null,
+    operatorId,
+    operatorName,
+    remarks,
+    predictionSnapshot: {
+      recommendedWindow: prediction.recommendedWindow,
+      recommendedTimeSlot: prediction.recommendedTimeSlot,
+      diversionSuggestions: prediction.diversionSuggestions,
+      specialReminders: prediction.specialReminders,
+      ruleCheckResult: prediction.ruleCheckResult
+    },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+
+  records.unshift(appointment);
+  saveAppointments(records);
+  return appointment;
 }
 
 function createAppointment(params) {
@@ -460,11 +634,16 @@ function createAppointment(params) {
   const prediction = predictAppointment(predictParams);
 
   if (!prediction.canReserve) {
+    const failReasonsList = determineFailReason(prediction, params);
+    const failedAppointment = createFailedAppointment(params, prediction, failReasonsList);
     return {
       success: false,
       reason: prediction.cannotReserveReasons.length > 0 ? prediction.cannotReserveReasons[0] : '不符合预约条件',
       cannotReserveReasons: prediction.cannotReserveReasons,
       supplementaryMaterials: prediction.supplementaryMaterials,
+      failReasonCodes: failReasonsList,
+      failReasons: failReasonsList.map(r => failReasons[r] || r),
+      appointment: failedAppointment,
       prediction
     };
   }
@@ -478,9 +657,14 @@ function createAppointment(params) {
   });
 
   if (duplicateCheck.isDuplicate) {
+    const failReasonsList = ['duplicate'];
+    const failedAppointment = createFailedAppointment(params, prediction, failReasonsList, duplicateCheck);
     return {
       success: false,
       reason: duplicateCheck.reason,
+      failReasonCodes: failReasonsList,
+      failReasons: failReasonsList.map(r => failReasons[r] || r),
+      appointment: failedAppointment,
       duplicateCheck,
       prediction
     };
